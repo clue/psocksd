@@ -1,0 +1,11 @@
+{
+    "homepage": "http://github.com/clue/psocksd",
+    "license": "MIT",
+    "autoload": {
+        "psr-0": {"Socks": ""}
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "clue/socks": "*"
+    }
+}
