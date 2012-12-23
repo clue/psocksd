@@ -4,8 +4,7 @@
     "autoload": {
         "psr-0": {"Socks": ""}
     },
-    "minimum-stability": "dev",
     "require": {
-        "clue/socks": "*"
+        "clue/socks": "0.3.*"
     }
 }
