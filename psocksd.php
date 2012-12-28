@@ -57,6 +57,36 @@ if (isset($settings['user']) || isset($settings['pass'])) {
     ));
 }
 
+$server->on('connection', function(React\Socket\Connection $client) {
+    $log = function($msg) use ($client) {
+        echo date('Y-m-d H:i:s') . ' #' . (int)$client->stream . ' ' . $msg . PHP_EOL;
+    };
+
+    $log('connected');
+
+    $client->on('error', function($error) use ($log) {
+        $msg = $error->getMessage();
+        while ($error->getPrevious() !== null) {
+            $error = $error->getPrevious();
+            $msg .= ' - ' . $error->getMessage();
+        }
+
+        $log('error: ' . $msg);
+    });
+
+    $client->on('target', function ($host, $port) use ($log) {
+        $log('tunnel target: ' . $host . ':' . $port);
+    });
+
+    $client->on('ready', function(React\Stream\Stream $remote) use($log) {
+        $log('tunnel to remote stream #' . (int)$remote->stream . ' successfully established');
+    });
+
+    $client->on('close', function () use ($log) {
+        $log('disconnected');
+    });
+});
+
 echo 'SOCKS proxy server listening on ' . $settings['host'] . ':' . $settings['port'] . PHP_EOL;
 
 $loop->run();
