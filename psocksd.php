@@ -37,8 +37,10 @@ $loop = React\EventLoop\Factory::create();
 $dnsResolverFactory = new React\Dns\Resolver\Factory();
 $dns = $dnsResolverFactory->createCached('8.8.8.8', $loop);
 
+$socket = new React\Socket\Server($loop);
+
 $factory = new Socks\Factory($loop, $dns);
-$server = $factory->createServer();
+$server = $factory->createServer($socket);
 
 if (preg_match('/^socks(\d\w?)?$/', $settings['scheme'], $match)) {
     if (isset($match[1])) {
@@ -48,7 +50,7 @@ if (preg_match('/^socks(\d\w?)?$/', $settings['scheme'], $match)) {
     throw new InvalidArgumentException('Invalid socket scheme given');
 }
 
-$server->listen($settings['port'], $settings['host']);
+$socket->listen($settings['port'], $settings['host']);
 
 if (isset($settings['user']) || isset($settings['pass'])) {
     $settings += array('user' => '', 'pass' => '');
@@ -58,8 +60,9 @@ if (isset($settings['user']) || isset($settings['pass'])) {
 }
 
 $server->on('connection', function(React\Socket\Connection $client) {
-    $log = function($msg) use ($client) {
-        echo date('Y-m-d H:i:s') . ' #' . (int)$client->stream . ' ' . $msg . PHP_EOL;
+    $name = '#'.(int)$client->stream;
+    $log = function($msg) use ($client, &$name) {
+        echo date('Y-m-d H:i:s') . ' ' . $name . ' ' . $msg . PHP_EOL;
     };
 
     $log('connected');
@@ -76,6 +79,11 @@ $server->on('connection', function(React\Socket\Connection $client) {
 
     $client->on('target', function ($host, $port) use ($log) {
         $log('tunnel target: ' . $host . ':' . $port);
+    });
+
+    $client->on('auth', function($username) use ($log, &$name) {
+        $name .= '(' . $username . ')';
+        $log('client authenticated');
     });
 
     $client->on('ready', function(React\Stream\Stream $remote) use($log) {
