@@ -8,10 +8,14 @@ class App
 {
     private $server;
     private $via;
+    private $commands;
 
     public function __construct()
     {
-
+        $this->commands = array(
+            'help' => new Command\Help($this),
+            'status' => new Command\Status($this)
+        );
     }
 
     public function run()
@@ -71,7 +75,36 @@ class App
 
         echo 'SOCKS proxy server listening on ' . $settings['host'] . ':' . $settings['port'] . PHP_EOL;
 
+        if (defined('STDIN') && is_resource(STDIN)) {
+            $that = $this;
+            $loop->addReadStream(STDIN, function() use ($that) {
+                $line = trim(fgets(STDIN, 4096));
+                $that->onReadLine($line);
+            });
+        }
+
         $loop->run();
+    }
+
+    public function onReadLine($line)
+    {
+        // nothing entered => skip input
+        if ($line === '') {
+            return;
+        }
+
+        $args = explode(' ', $line);
+        $command = array_shift($args);
+
+        if (isset($this->commands[$command])) {
+            $this->commands[$command]->run($args);
+        } else {
+            echo 'invalid command. type "help"?' . PHP_EOL;
+        }
+    }
+
+    public function getServer(){
+        return $this->server;
     }
 
     private function setConnectionManager(ConnectionManagerInterface $connectionManager)
