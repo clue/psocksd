@@ -1,6 +1,7 @@
 <?php
 
 include_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/src/ConnectionManagerWrapper.php';
 
 $measureTraffic = true;
 $measureTime = true;
@@ -40,10 +41,11 @@ $loop = React\EventLoop\Factory::create();
 $dnsResolverFactory = new React\Dns\Resolver\Factory();
 $dns = $dnsResolverFactory->createCached('8.8.8.8', $loop);
 
+$via = new ConnectionManagerWrapper(new \ConnectionManager\ConnectionManager($loop, $dns));
+
 $socket = new React\Socket\Server($loop);
 
-$factory = new Socks\Factory($loop, $dns);
-$server = $factory->createServer($socket);
+$server = new Socks\Server($socket, $loop, $via);
 
 if (preg_match('/^socks(\d\w?)?$/', $settings['scheme'], $match)) {
     if (isset($match[1])) {
