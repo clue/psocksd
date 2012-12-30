@@ -2,6 +2,9 @@
 
 include_once __DIR__.'/vendor/autoload.php';
 
+$measureTraffic = true;
+$measureTime = true;
+
 function parse($socket)
 {
     // workaround parsing plain port numbers
@@ -90,10 +93,44 @@ $server->on('connection', function(React\Socket\Connection $client) {
         $log('tunnel to remote stream #' . (int)$remote->stream . ' successfully established');
     });
 
-    $client->on('close', function () use ($log) {
-        $log('disconnected');
+    $client->on('close', function () use ($log, &$client) {
+        $dump = '';
+        $client->emit('dump-close', array(&$dump));
+
+        $log('disconnected' . $dump);
     });
 });
+
+if ($measureTraffic) {
+    $server->on('connection', function(React\Socket\Connection $client) {
+        $client->on('ready', function(React\Stream\Stream $remote) use($client) {
+            $up = $down = 0;
+
+            $client->on('data', function($data) use (&$up) {
+                $up += strlen($data);
+            });
+
+            $remote->on('data', function($data) use (&$down) {
+                $down += strlen($data);
+            });
+
+            $client->on('dump-close', function (&$dump) use (&$up, &$down) {
+                $dump .= ' (traffic: ' . $down . 'B⤓/' . $up . 'B↥)';
+            });
+        });
+    });
+}
+
+if ($measureTime) {
+    $server->on('connection', function(React\Socket\Connection $client) {
+        $start = microtime(true);
+
+        $client->on('dump-close', function (&$dump) use ($start) {
+            $stop = microtime(true);
+            $dump .= ' (⌚ ' . round($stop - $start,3).'s)';
+        });
+    });
+}
 
 echo 'SOCKS proxy server listening on ' . $settings['host'] . ':' . $settings['port'] . PHP_EOL;
 
