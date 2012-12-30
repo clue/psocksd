@@ -23,12 +23,9 @@ class App
         $measureTraffic = true;
         $measureTime = true;
 
-        // $socket = null;
-        // $socket = 'socks://me@localhost:9050';
-        // $socket = 'localhost:9050';
-        $socket = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : null;
+        $socket = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : 'socks://localhost:9050';
 
-        $settings = (($socket === null) ? array() : $this->parse($socket)) + array('scheme' => 'socks', 'host' => 'localhost', 'port' => 1050);
+        $settings = $this->parseSocksSocket($socket);
 
         if ($settings['host'] === '*') {
             $settings['host'] = '0.0.0.0';
@@ -46,12 +43,8 @@ class App
 
         $this->server = new \Socks\Server($socket, $loop, $this->via);
 
-        if (preg_match('/^socks(\d\w?)?$/', $settings['scheme'], $match)) {
-            if (isset($match[1])) {
-                $this->server->setProtocolVersion($match[1]);
-            }
-        } else {
-            throw new \InvalidArgumentException('Invalid socket scheme given');
+        if (isset($settings['protocolVersion'])) {
+            $this->server->setProtocolVersion($settings['protocolVersion']);
         }
 
         $socket->listen($settings['port'], $settings['host']);
@@ -93,6 +86,7 @@ class App
             return;
         }
 
+        // TODO: properly parse command and its arguments (respect quotes, etc.)
         $args = explode(' ', $line);
         $command = array_shift($args);
 
@@ -112,21 +106,35 @@ class App
         $this->via->setConnectionManager($connectionManager);
     }
 
-    private function parse($socket)
+    // $socket = 9050;
+    // $socket = 'socks://me@localhost:9050';
+    // $socket = 'localhost:9050';
+    public function parseSocksSocket($socket)
     {
         // workaround parsing plain port numbers
         if (preg_match('/^\d+$/', $socket)) {
-            return array('port' => (int)$socket);
-        }
-
-        // workaround for incorrect parsing when scheme is missing
-        $parts = parse_url((strpos($socket, '://') === false ? 'socks://' : '') . $socket);
-        if (!$parts) {
-            throw new InvalidArgumentException('Invalid/unparsable socket given');
+            $parts = array('port' => (int)$socket);
+        } else {
+            // workaround for incorrect parsing when scheme is missing
+            $parts = parse_url((strpos($socket, '://') === false ? 'socks://' : '') . $socket);
+            if (!$parts) {
+                throw new InvalidArgumentException('Invalid/unparsable socket given');
+            }
         }
         if (isset($parts['path']) || isset($parts['query']) || isset($parts['frament'])) {
             throw new InvalidArgumentException('Invalid socket given');
         }
+
+        $parts += array('scheme' => 'socks', 'host' => 'localhost', 'port' => 9050);
+
+        if (preg_match('/^socks(\d\w?)?$/', $parts['scheme'], $match)) {
+            if (isset($match[1])) {
+                $parts['protocolVersion'] = $match[1];
+            }
+        } else {
+            throw new InvalidArgumentException('Invalid socket scheme given');
+        }
+
         return $parts;
     }
 }
