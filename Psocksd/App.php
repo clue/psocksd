@@ -1,9 +1,19 @@
 <?php
 
-require_once __DIR__.'/src/ConnectionManagerWrapper.php';
+namespace Psocksd;
+
+use ConnectionManager\ConnectionManagerInterface;
 
 class App
 {
+    private $server;
+    private $via;
+
+    public function __construct()
+    {
+
+    }
+
     public function run()
     {
         $measureTraffic = true;
@@ -21,47 +31,52 @@ class App
         }
 
 
-        $loop = React\EventLoop\Factory::create();
+        $loop = \React\EventLoop\Factory::create();
 
-        $dnsResolverFactory = new React\Dns\Resolver\Factory();
+        $dnsResolverFactory = new \React\Dns\Resolver\Factory();
         $dns = $dnsResolverFactory->createCached('8.8.8.8', $loop);
 
-        $via = new ConnectionManagerWrapper(new \ConnectionManager\ConnectionManager($loop, $dns));
+        $this->via = new ConnectionManagerWrapper(new \ConnectionManager\ConnectionManager($loop, $dns));
 
-        $socket = new React\Socket\Server($loop);
+        $socket = new \React\Socket\Server($loop);
 
-        $server = new Socks\Server($socket, $loop, $via);
+        $this->server = new \Socks\Server($socket, $loop, $this->via);
 
         if (preg_match('/^socks(\d\w?)?$/', $settings['scheme'], $match)) {
             if (isset($match[1])) {
-                $server->setProtocolVersion($match[1]);
+                $this->server->setProtocolVersion($match[1]);
             }
         } else {
-            throw new InvalidArgumentException('Invalid socket scheme given');
+            throw new \InvalidArgumentException('Invalid socket scheme given');
         }
 
         $socket->listen($settings['port'], $settings['host']);
 
         if (isset($settings['user']) || isset($settings['pass'])) {
             $settings += array('user' => '', 'pass' => '');
-            $server->setAuthArray(array(
-                    $settings['user'] => $settings['pass']
+            $this->server->setAuthArray(array(
+                $settings['user'] => $settings['pass']
             ));
         }
 
-        new Log($server);
+        new Option\Log($this->server);
 
         if ($measureTraffic) {
-            new MeasureTraffic($server);
+            new Option\MeasureTraffic($this->server);
         }
 
         if ($measureTime) {
-            new MeasureTime($server);
+            new Option\MeasureTime($this->server);
         }
 
         echo 'SOCKS proxy server listening on ' . $settings['host'] . ':' . $settings['port'] . PHP_EOL;
 
         $loop->run();
+    }
+
+    private function setConnectionManager(ConnectionManagerInterface $connectionManager)
+    {
+        $this->via->setConnectionManager($connectionManager);
     }
 
     private function parse($socket)

@@ -1,10 +1,12 @@
 <?php
 
+namespace Psocksd\Option;
+
 class Log
 {
     public function __construct($server)
     {
-        $server->on('connection', function(React\Socket\Connection $client) {
+        $server->on('connection', function(\React\Socket\Connection $client) {
             $name = '#'.(int)$client->stream;
             $log = function($msg) use ($client, &$name) {
                 echo date('Y-m-d H:i:s') . ' ' . $name . ' ' . $msg . PHP_EOL;
@@ -31,7 +33,7 @@ class Log
                 $log('client authenticated');
             });
 
-            $client->on('ready', function(React\Stream\Stream $remote) use($log) {
+            $client->on('ready', function(\React\Stream\Stream $remote) use($log) {
                 $log('tunnel to remote stream #' . (int)$remote->stream . ' successfully established');
             });
 

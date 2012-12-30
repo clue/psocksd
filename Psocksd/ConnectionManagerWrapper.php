@@ -1,5 +1,7 @@
 <?php
 
+namespace Psocksd;
+
 use ConnectionManager\ConnectionManagerInterface;
 
 class ConnectionManagerWrapper implements ConnectionManagerInterface

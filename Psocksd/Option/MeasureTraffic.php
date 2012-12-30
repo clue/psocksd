@@ -1,11 +1,13 @@
 <?php
 
+namespace Psocksd\Option;
+
 class MeasureTraffic
 {
     public function __construct($server)
     {
-        $server->on('connection', function(React\Socket\Connection $client) {
-            $client->on('ready', function(React\Stream\Stream $remote) use($client) {
+        $server->on('connection', function(\React\Socket\Connection $client) {
+            $client->on('ready', function(\React\Stream\Stream $remote) use($client) {
                 $up = $down = 0;
 
                 $client->on('data', function($data) use (&$up) {
