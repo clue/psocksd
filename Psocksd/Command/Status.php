@@ -2,7 +2,7 @@
 
 namespace Psocksd\Command;
 
-class Status
+class Status implements CommandInterface
 {
     public function __construct($app)
     {
@@ -12,5 +12,10 @@ class Status
     public function run($args)
     {
         echo 'status n/a' . PHP_EOL;
+    }
+
+    public function getHelp()
+    {
+        return 'show status';
     }
 }

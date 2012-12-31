@@ -7,7 +7,7 @@ use Socks\Client;
 use ConnectionManager\ConnectionManager;
 use \UnexpectedValueException;
 
-class Via
+class Via implements CommandInterface
 {
     protected $app;
 
@@ -64,6 +64,11 @@ class Via
             $this->pingEcho($via, 'www.google.com', 80);
         }
         $this->app->setConnectionManager($via);
+    }
+
+    public function getHelp()
+    {
+        return 'forward all connections via next SOCKS server';
     }
 
     public function pingEcho($via, $host, $port)

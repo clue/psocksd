@@ -119,6 +119,11 @@ class App
         return $this->loop;
     }
 
+    public function getCommands()
+    {
+        return $this->commands;
+    }
+
     public function setConnectionManager(ConnectionManagerInterface $connectionManager)
     {
         $this->via->setConnectionManager($connectionManager);
