@@ -2,11 +2,17 @@
 
 namespace Psocksd;
 
+use ConnectionManager\ConnectionManager;
+
+use Socks\Client;
+
 use ConnectionManager\ConnectionManagerInterface;
 
 class App
 {
     private $server;
+    private $loop;
+    private $resolver;
     private $via;
     private $commands;
 
@@ -14,7 +20,8 @@ class App
     {
         $this->commands = array(
             'help' => new Command\Help($this),
-            'status' => new Command\Status($this)
+            'status' => new Command\Status($this),
+            'via'    => new Command\Via($this)
         );
     }
 
@@ -32,10 +39,10 @@ class App
         }
 
 
-        $loop = \React\EventLoop\Factory::create();
+        $this->loop = $loop = \React\EventLoop\Factory::create();
 
         $dnsResolverFactory = new \React\Dns\Resolver\Factory();
-        $dns = $dnsResolverFactory->createCached('8.8.8.8', $loop);
+        $this->resolver = $dns = $dnsResolverFactory->createCached('8.8.8.8', $loop);
 
         $this->via = new ConnectionManagerWrapper(new \ConnectionManager\ConnectionManager($loop, $dns));
 
@@ -97,11 +104,22 @@ class App
         }
     }
 
-    public function getServer(){
+    public function getServer()
+    {
         return $this->server;
     }
 
-    private function setConnectionManager(ConnectionManagerInterface $connectionManager)
+    public function getResolver()
+    {
+        return $this->resolver;
+    }
+
+    public function getLoop()
+    {
+        return $this->loop;
+    }
+
+    public function setConnectionManager(ConnectionManagerInterface $connectionManager)
     {
         $this->via->setConnectionManager($connectionManager);
     }
@@ -136,5 +154,16 @@ class App
         }
 
         return $parts;
+    }
+
+    public function reverseSocksSocket($parts)
+    {
+        $ret = $parts['scheme'] . '://';
+        if (isset($parts['user']) || isset($parts['pass'])) {
+            $parts += array('user' => '', 'pass' => '');
+            $ret .= $parts['user'] . ':' . $parts['pass'] . '@';
+        }
+        $ret .= $parts['host'] . ':' . $parts['port'];
+        return $ret;
     }
 }
