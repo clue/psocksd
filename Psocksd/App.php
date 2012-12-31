@@ -3,10 +3,9 @@
 namespace Psocksd;
 
 use ConnectionManager\ConnectionManager;
-
 use Socks\Client;
-
 use ConnectionManager\ConnectionManagerInterface;
+use \InvalidArgumentException;
 
 class App
 {

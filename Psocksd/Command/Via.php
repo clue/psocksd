@@ -6,6 +6,7 @@ use Psocksd\App;
 use Socks\Client;
 use ConnectionManager\ConnectionManager;
 use \UnexpectedValueException;
+use \Exception;
 
 class Via implements CommandInterface
 {
@@ -31,7 +32,13 @@ class Via implements CommandInterface
 
             echo 'use direct connection to target' . PHP_EOL;
         } else {
-            $parsed = $this->app->parseSocksSocket($socket);
+            try {
+                $parsed = $this->app->parseSocksSocket($socket);
+            }
+            catch (Exception $e) {
+                echo 'error: invalid target: ' . $e->getMessage() . PHP_EOL;
+                return;
+            }
 
             // TODO: remove hack
             // resolver can not resolve 'localhost' ATM
@@ -41,11 +48,23 @@ class Via implements CommandInterface
 
             $via = new Client($this->app->getLoop(), $direct, $this->app->getResolver(), $parsed['host'], $parsed['port']);
             if (isset($parsed['protocolVersion'])) {
-                $via->setProtocolVersion($parsed['protocolVersion']);
+                try {
+                    $via->setProtocolVersion($parsed['protocolVersion']);
+                }
+                catch (Exception $e) {
+                    echo 'error: invalid protocol version: ' . $e->getMessage() . PHP_EOL;
+                    return;
+                }
             }
             if (isset($parsed['user']) || isset($parsed['pass'])) {
                 $parsed += array('user' =>'', 'pass' => '');
-                $via->setAuth($parsed['user'], $parsed['pass']);
+                try {
+                    $via->setAuth($parsed['user'], $parsed['pass']);
+                }
+                catch (Exception $e) {
+                    echo 'error: invalid authentication info: ' . $e->getMessage() . PHP_EOL;
+                    return;
+                }
             }
 
             echo 'use '.$this->app->reverseSocksSocket($parsed) . ' as next hop';
