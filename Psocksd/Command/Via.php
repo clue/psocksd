@@ -79,8 +79,6 @@ class Via implements CommandInterface
             }
 
             echo PHP_EOL;
-
-            $this->pingEcho($via, 'www.google.com', 80);
         }
         $this->app->setConnectionManager($via);
     }
@@ -88,27 +86,5 @@ class Via implements CommandInterface
     public function getHelp()
     {
         return 'forward all connections via next SOCKS server';
-    }
-
-    public function pingEcho($via, $host, $port)
-    {
-        return $this->ping($via, $host, $port)->then(function ($time) {
-            echo 'ping test OK (⌚ ' . round($time, 3).'s)' . PHP_EOL;
-            return $time;
-        }, function ($error) {
-            $msg = $error->getMessage();
-            echo 'ping test FAILED: ' . $msg . PHP_EOL;
-            throw $error;
-        });
-    }
-
-    public function ping($via, $host, $port)
-    {
-        $start = microtime(true);
-        return $via->getConnection($host, $port)->then(function ($stream) use ($start) {
-            $stop = microtime(true);
-            $stream->close();
-            return ($stop - $start);
-        });
     }
 }
