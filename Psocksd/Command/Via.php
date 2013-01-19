@@ -6,7 +6,9 @@ use Psocksd\App;
 use Socks\Client;
 use ConnectionManager\ConnectionManager;
 use ConnectionManager\ConnectionManagerInterface;
+use ConnectionManager\Extra\ConnectionManagerReject;
 use \UnexpectedValueException;
+use \InvalidArgumentException;
 use \Exception;
 
 class Via implements CommandInterface
@@ -29,8 +31,10 @@ class Via implements CommandInterface
             $this->runList();
         } else if (count($args) === 2 && $args[0] === 'default') {
             $this->runSetDefault($args[1]);
-        } else if (count($args) === 3 && $args[0] === 'add') {
-            $this->runAdd($args[1], $args[2]);
+        } else if (count($args) === 2 && $args[0] === 'reject') {
+            $this->runAdd($args[1], 'reject', -1);
+        } else if ((count($args) === 3 || count($args) === 4) && $args[0] === 'add') {
+            $this->runAdd($args[1], $args[2], isset($args[3]) ? $args[3] : 0);
         } else if (count($args) === 2 && $args[0] === 'remove') {
             $this->runRemove($args[1]);
         } else {
@@ -42,30 +46,31 @@ class Via implements CommandInterface
     {
         $cm = $this->app->getConnectionManager();
 
-        $lenId   = 3;
-        $lenHost = 5;
-        $lenPort = 5;
+        $lengths = array(
+            'id' => 3,
+            'host' => 5,
+            'port' => 5,
+            'priority' => 5
+        );
 
         $list = array();
-        foreach($cm->getConnectionManagerEntries() as $id=>$entry){
+        foreach ($cm->getConnectionManagerEntries() as $id => $entry) {
             $list [$id]= $entry;
 
-            if (strlen($id) > $lenId) {
-                $lenId = strlen($id);
-            }
-            if (strlen($entry['host']) > $lenHost) {
-                $lenHost = strlen($entry['host']);
-            }
-            if (strlen($entry['port']) > $lenPort) {
-                $lenPort = strlen($entry['port']);
+            $entry['id'] = $id;
+            foreach ($lengths as $key => &$value) {
+                if (strlen($entry[$key]) > $value) {
+                    $value = strlen($entry[$key]);
+                }
             }
         }
 
-        echo str_pad('Id:', $lenId, ' ') . ' ' . str_pad('Host:', $lenHost, ' ') . ' ' . str_pad('Port:', $lenPort, ' ') . ' ' . 'Target:' . PHP_EOL;
-        foreach($list as $id=>$entry){
-            echo str_pad($id, $lenId, ' ') . ' ' .
-                 str_pad($entry['host'], $lenHost, ' ') . ' ' .
-                 str_pad($entry['port'], $lenPort, ' ') . ' ' .
+        echo str_pad('Id:', $lengths['id'], ' ') . ' ' . str_pad('Host:', $lengths['host'], ' ') . ' ' . str_pad('Port:', $lengths['port'], ' ') . ' ' . str_pad('Prio:', $lengths['priority'], ' ') . ' ' . 'Target:' . PHP_EOL;
+        foreach ($list as $id => $entry) {
+            echo str_pad($id, $lengths['id'], ' ') . ' ' .
+                 str_pad($entry['host'], $lengths['host'], ' ') . ' ' .
+                 str_pad($entry['port'], $lengths['port'], ' ') . ' ' .
+                 str_pad($entry['priority'], $lengths['priority'], ' ') . ' ' .
                  $this->dumpConnectionManager($entry['connectionManager']) . PHP_EOL;
         }
     }
@@ -83,20 +88,32 @@ class Via implements CommandInterface
         $this->app->getConnectionManager()->addConnectionManagerFor($via, '*', '*', App::PRIORITY_DEFAULT);
     }
 
-    public function runAdd($target, $socket)
+    public function runAdd($target, $socket, $priority)
     {
         $via = $this->createConnectionManager($socket);
+
+        try {
+            $priority = $this->coercePriority($priority);
+        }
+        catch (Exception $e) {
+            echo 'error: invalid priority: ' . $e->getMessage() . PHP_EOL;
+            return;
+        }
 
         // TODO: support IPv6 addresses
         $parts = explode(':', $target, 2);
         $host = $parts[0];
         $port = isset($parts[1]) ? $parts[1] : '*';
 
-        $this->app->getConnectionManager()->addConnectionManagerFor($via, $host, $port);
+        $this->app->getConnectionManager()->addConnectionManagerFor($via, $host, $port, $priority);
     }
 
     protected function createConnectionManager($socket)
     {
+        if ($socket === 'reject') {
+            echo 'reject' . PHP_EOL;
+            return new ConnectionManagerReject();
+        }
         $direct = new ConnectionManager($this->app->getLoop(), $this->app->getResolver());
         if ($socket === 'none') {
             $via = $direct;
@@ -152,6 +169,15 @@ class Via implements CommandInterface
             echo PHP_EOL;
         }
         return $via;
+    }
+
+    protected function coercePriority($priority)
+    {
+        $ret = filter_var($priority, FILTER_VALIDATE_FLOAT);
+        if ($ret === false) {
+            throw new InvalidArgumentException('Invalid priority given');
+        }
+        return $ret;
     }
 
     protected function dumpConnectionManager(ConnectionManagerInterface $connectionManager)
