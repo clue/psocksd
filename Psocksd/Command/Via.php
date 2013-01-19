@@ -5,6 +5,7 @@ namespace Psocksd\Command;
 use Psocksd\App;
 use Socks\Client;
 use ConnectionManager\ConnectionManager;
+use ConnectionManager\ConnectionManagerInterface;
 use \UnexpectedValueException;
 use \Exception;
 
@@ -17,15 +18,85 @@ class Via implements CommandInterface
         $this->app = $app;
     }
 
+    public function getHelp()
+    {
+        return 'forward all connections via next SOCKS server';
+    }
+
     public function run($args)
     {
-        if (count($args) !== 1) {
-            echo 'error: command requires one argument (target socks server or "none")'.PHP_EOL;
-            return;
+        if (count($args) === 1 && $args[0] === 'list') {
+            $this->runList();
+        } else if (count($args) === 2 && $args[0] === 'default') {
+            $this->runSetDefault($args[1]);
+        } else if (count($args) === 3 && $args[0] === 'add') {
+            $this->runAdd($args[1], $args[2]);
+        } else if (count($args) === 2 && $args[0] === 'remove') {
+            $this->runRemove($args[1]);
+        } else {
+            echo 'error: invalid command arguments ()' . PHP_EOL;
+        }
+    }
+
+    public function runList()
+    {
+        $cm = $this->app->getConnectionManager();
+
+        $lenId   = 3;
+        $lenHost = 5;
+        $lenPort = 5;
+
+        $list = array();
+        foreach($cm->getConnectionManagerEntries() as $id=>$entry){
+            $list [$id]= $entry;
+
+            if (strlen($id) > $lenId) {
+                $lenId = strlen($id);
+            }
+            if (strlen($entry['host']) > $lenHost) {
+                $lenHost = strlen($entry['host']);
+            }
+            if (strlen($entry['port']) > $lenPort) {
+                $lenPort = strlen($entry['port']);
+            }
         }
 
-        $socket = $args[0];
+        echo str_pad('Id:', $lenId, ' ') . ' ' . str_pad('Host:', $lenHost, ' ') . ' ' . str_pad('Port:', $lenPort, ' ') . ' ' . 'Target:' . PHP_EOL;
+        foreach($list as $id=>$entry){
+            echo str_pad($id, $lenId, ' ') . ' ' .
+                 str_pad($entry['host'], $lenHost, ' ') . ' ' .
+                 str_pad($entry['port'], $lenPort, ' ') . ' ' .
+                 $this->dumpConnectionManager($entry['connectionManager']) . PHP_EOL;
+        }
+    }
 
+    public function runRemove($id)
+    {
+        $this->app->getConnectionManager()->removeConnectionManagerEntry($id);
+    }
+
+    public function runSetDefault($socket)
+    {
+        // todo: remove all CMs with PRIORITY_DEFAULT
+
+        $via = $this->createConnectionManager($socket);
+        $this->app->getConnectionManager()->addConnectionManagerFor($via, '*', '*', App::PRIORITY_DEFAULT);
+    }
+
+    public function runAdd($target, $socket)
+    {
+        $via = $this->createConnectionManager($socket);
+
+        // TODO: support IPv6 addresses
+        $parts = explode(':', $target, 2);
+        $host = $parts[0];
+        $port = isset($parts[1]) ? $parts[1] : '*';
+
+        $this->app->getConnectionManager()->addConnectionManagerFor($via, $host, $port);
+    }
+
+    protected function createConnectionManager($socket)
+    {
         $direct = new ConnectionManager($this->app->getLoop(), $this->app->getResolver());
         if ($socket === 'none') {
             $via = $direct;
@@ -80,11 +151,14 @@ class Via implements CommandInterface
 
             echo PHP_EOL;
         }
-        $this->app->setConnectionManager($via);
+        return $via;
     }
 
-    public function getHelp()
+    protected function dumpConnectionManager(ConnectionManagerInterface $connectionManager)
     {
-        return 'forward all connections via next SOCKS server';
+        if ($connectionManager instanceof Client) {
+
+        }
+        return get_class($connectionManager) . '()';
     }
 }
