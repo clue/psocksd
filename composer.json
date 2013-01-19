@@ -5,6 +5,7 @@
         "psr-0": {"Psocksd": ""}
     },
     "require": {
-        "clue/socks": "0.3.*"
+        "clue/socks": "0.3.*",
+        "clue/connection-manager-extra": "dev-master"
     }
 }
