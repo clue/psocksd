@@ -5,7 +5,7 @@ namespace Psocksd;
 use Socks\Client;
 use ConnectionManager\ConnectionManager;
 use ConnectionManager\ConnectionManagerInterface;
-use ConnectionManager\Extra\ConnectionManagerSwappable;
+use ConnectionManager\Extra\Multiple\ConnectionManagerSelective;
 use \InvalidArgumentException;
 
 class App
@@ -15,6 +15,8 @@ class App
     private $resolver;
     private $via;
     private $commands;
+
+    const PRIORITY_DEFAULT = 100;
 
     public function __construct()
     {
@@ -45,7 +47,8 @@ class App
         $dnsResolverFactory = new \React\Dns\Resolver\Factory();
         $this->resolver = $dns = $dnsResolverFactory->createCached('8.8.8.8', $loop);
 
-        $this->via = new ConnectionManagerSwappable(new \ConnectionManager\ConnectionManager($loop, $dns));
+        $this->via = new ConnectionManagerSelective();
+        $this->via->addConnectionManagerFor(new \ConnectionManager\ConnectionManager($loop, $dns), '*', '*', self::PRIORITY_DEFAULT);
 
         $socket = new \React\Socket\Server($loop);
 
@@ -125,9 +128,12 @@ class App
         return $this->commands;
     }
 
-    public function setConnectionManager(ConnectionManagerInterface $connectionManager)
+    /**
+     * @return \ConnectionManager\Extra\Multiple\ConnectionManagerSelective
+     */
+    public function getConnectionManager()
     {
-        $this->via->setConnectionManager($connectionManager);
+        return $this->via;
     }
 
     // $socket = 9050;
