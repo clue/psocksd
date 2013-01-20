@@ -82,10 +82,17 @@ class Via implements CommandInterface
 
     public function runSetDefault($socket)
     {
-        // todo: remove all CMs with PRIORITY_DEFAULT
-
         $via = $this->createConnectionManager($socket);
-        $this->app->getConnectionManager()->addConnectionManagerFor($via, '*', '*', App::PRIORITY_DEFAULT);
+
+        // remove all CMs with PRIORITY_DEFAULT
+        $cm = $this->app->getConnectionManager();
+        foreach ($cm->getConnectionManagerEntries() as $id => $entry) {
+            if ($entry['priority'] == App::PRIORITY_DEFAULT) {
+                $cm->removeConnectionManagerEntry($id);
+            }
+        }
+
+        $cm->addConnectionManagerFor($via, '*', '*', App::PRIORITY_DEFAULT);
     }
 
     public function runAdd($target, $socket, $priority)
