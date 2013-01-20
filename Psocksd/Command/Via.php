@@ -82,7 +82,13 @@ class Via implements CommandInterface
 
     public function runSetDefault($socket)
     {
-        $via = $this->createConnectionManager($socket);
+        try {
+            $via = $this->createConnectionManager($socket);
+        }
+        catch (Exception $e) {
+            echo 'error: invalid target: ' . $e->getMessage() . PHP_EOL;
+            return;
+        }
 
         // remove all CMs with PRIORITY_DEFAULT
         $cm = $this->app->getConnectionManager();
@@ -97,7 +103,13 @@ class Via implements CommandInterface
 
     public function runAdd($target, $socket, $priority)
     {
-        $via = $this->createConnectionManager($socket);
+        try {
+            $via = $this->createConnectionManager($socket);
+        }
+        catch (Exception $e) {
+            echo 'error: invalid target: ' . $e->getMessage() . PHP_EOL;
+            return;
+        }
 
         try {
             $priority = $this->coercePriority($priority);
@@ -127,13 +139,7 @@ class Via implements CommandInterface
 
             echo 'use direct connection to target' . PHP_EOL;
         } else {
-            try {
-                $parsed = $this->app->parseSocksSocket($socket);
-            }
-            catch (Exception $e) {
-                echo 'error: invalid target: ' . $e->getMessage() . PHP_EOL;
-                return;
-            }
+            $parsed = $this->app->parseSocksSocket($socket);
 
             // TODO: remove hack
             // resolver can not resolve 'localhost' ATM
@@ -147,8 +153,7 @@ class Via implements CommandInterface
                     $via->setProtocolVersion($parsed['protocolVersion']);
                 }
                 catch (Exception $e) {
-                    echo 'error: invalid protocol version: ' . $e->getMessage() . PHP_EOL;
-                    return;
+                    throw new Exception('invalid protocol version: ' . $e->getMessage());
                 }
             }
             if (isset($parsed['user']) || isset($parsed['pass'])) {
@@ -157,8 +162,7 @@ class Via implements CommandInterface
                     $via->setAuth($parsed['user'], $parsed['pass']);
                 }
                 catch (Exception $e) {
-                    echo 'error: invalid authentication info: ' . $e->getMessage() . PHP_EOL;
-                    return;
+                    throw new Exception('invalid authentication info: ' . $e->getMessage());
                 }
             }
 
