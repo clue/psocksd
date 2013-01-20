@@ -59,18 +59,23 @@ class Via implements CommandInterface
 
             $entry['id'] = $id;
             foreach ($lengths as $key => &$value) {
-                if (strlen($entry[$key]) > $value) {
-                    $value = strlen($entry[$key]);
+                $l = mb_strlen($entry[$key], 'utf-8');
+                if ($l > $value) {
+                    $value = $l;
                 }
             }
         }
 
-        echo str_pad('Id:', $lengths['id'], ' ') . ' ' . str_pad('Host:', $lengths['host'], ' ') . ' ' . str_pad('Port:', $lengths['port'], ' ') . ' ' . str_pad('Prio:', $lengths['priority'], ' ') . ' ' . 'Target:' . PHP_EOL;
+        echo $this->pad('Id:', $lengths['id']) . ' ' .
+             $this->pad('Host:', $lengths['host']) . ' ' .
+             $this->pad('Port:', $lengths['port']) . ' ' .
+             $this->pad('Prio:', $lengths['priority']) . ' ' .
+             'Target:' . PHP_EOL;
         foreach ($list as $id => $entry) {
-            echo str_pad($id, $lengths['id'], ' ') . ' ' .
-                 str_pad($entry['host'], $lengths['host'], ' ') . ' ' .
-                 str_pad($entry['port'], $lengths['port'], ' ') . ' ' .
-                 str_pad($entry['priority'], $lengths['priority'], ' ') . ' ' .
+            echo $this->pad($id, $lengths['id']) . ' ' .
+                 $this->pad($entry['host'], $lengths['host']) . ' ' .
+                 $this->pad($entry['port'], $lengths['port']) . ' ' .
+                 $this->pad($entry['priority'], $lengths['priority']) . ' ' .
                  $this->dumpConnectionManager($entry['connectionManager']) . PHP_EOL;
         }
     }
@@ -189,6 +194,11 @@ class Via implements CommandInterface
             throw new InvalidArgumentException('Invalid priority given');
         }
         return $ret;
+    }
+
+    private function pad($str, $len)
+    {
+        return $str . str_repeat(' ', $len - mb_strlen($str, 'utf-8'));
     }
 
     protected function dumpConnectionManager(ConnectionManagerInterface $connectionManager)
