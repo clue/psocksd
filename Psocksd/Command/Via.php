@@ -149,6 +149,9 @@ class Via implements CommandInterface
 
     protected function dumpConnectionManager(ConnectionManagerInterface $connectionManager)
     {
+        if ($connectionManager instanceof ConnectionManagerLabeled) {
+            return (string)$connectionManager;
+        }
         return get_class($connectionManager) . '(…)';
     }
 }

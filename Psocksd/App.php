@@ -50,7 +50,7 @@ class App
         $this->resolver = $dns = $dnsResolverFactory->createCached('8.8.8.8', $loop);
 
         $this->via = new ConnectionManagerSelective();
-        $this->via->addConnectionManagerFor(new \ConnectionManager\ConnectionManager($loop, $dns), '*', '*', self::PRIORITY_DEFAULT);
+        $this->via->addConnectionManagerFor($this->createConnectionManager('none'), '*', '*', self::PRIORITY_DEFAULT);
 
         $socket = new \React\Socket\Server($loop);
 
@@ -142,11 +142,11 @@ class App
     {
         if ($socket === 'reject') {
             echo 'reject' . PHP_EOL;
-            return new ConnectionManagerReject();
+            return new ConnectionManagerLabeled(new ConnectionManagerReject(), '-reject-');
         }
         $direct = new ConnectionManager($this->loop, $this->resolver);
         if ($socket === 'none') {
-            $via = $direct;
+            $via = new ConnectionManagerLabeled($direct, '-direct-');
 
             echo 'use direct connection to target' . PHP_EOL;
         } else {
@@ -187,6 +187,8 @@ class App
                 // ignore in case it's not allowed (SOCKS4 client)
                 echo ' (resolve locally)';
             }
+
+            $via = new ConnectionManagerLabeled($via, $this->reverseSocksSocket($parsed));
 
             echo PHP_EOL;
         }
