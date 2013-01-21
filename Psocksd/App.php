@@ -6,7 +6,9 @@ use Socks\Client;
 use ConnectionManager\ConnectionManager;
 use ConnectionManager\ConnectionManagerInterface;
 use ConnectionManager\Extra\Multiple\ConnectionManagerSelective;
+use ConnectionManager\Extra\ConnectionManagerReject;
 use \InvalidArgumentException;
+use \Exception;
 
 class App
 {
@@ -134,6 +136,61 @@ class App
     public function getConnectionManager()
     {
         return $this->via;
+    }
+
+    public function createConnectionManager($socket)
+    {
+        if ($socket === 'reject') {
+            echo 'reject' . PHP_EOL;
+            return new ConnectionManagerReject();
+        }
+        $direct = new ConnectionManager($this->loop, $this->resolver);
+        if ($socket === 'none') {
+            $via = $direct;
+
+            echo 'use direct connection to target' . PHP_EOL;
+        } else {
+            $parsed = $this->parseSocksSocket($socket);
+
+            // TODO: remove hack
+            // resolver can not resolve 'localhost' ATM
+            if ($parsed['host'] === 'localhost') {
+                $parsed['host'] = '127.0.0.1';
+            }
+
+            $via = new Client($this->loop, $direct, $this->resolver, $parsed['host'], $parsed['port']);
+            if (isset($parsed['protocolVersion'])) {
+                try {
+                    $via->setProtocolVersion($parsed['protocolVersion']);
+                }
+                catch (Exception $e) {
+                    throw new Exception('invalid protocol version: ' . $e->getMessage());
+                }
+            }
+            if (isset($parsed['user']) || isset($parsed['pass'])) {
+                $parsed += array('user' =>'', 'pass' => '');
+                try {
+                    $via->setAuth($parsed['user'], $parsed['pass']);
+                }
+                catch (Exception $e) {
+                    throw new Exception('invalid authentication info: ' . $e->getMessage());
+                }
+            }
+
+            echo 'use '.$this->reverseSocksSocket($parsed) . ' as next hop';
+
+            try {
+                $via->setResolveLocal(false);
+                echo ' (resolve remotely)';
+            }
+            catch (UnexpectedValueException $ignore) {
+                // ignore in case it's not allowed (SOCKS4 client)
+                echo ' (resolve locally)';
+            }
+
+            echo PHP_EOL;
+        }
+        return $via;
     }
 
     // $socket = 9050;

@@ -2,11 +2,12 @@
 
 namespace Psocksd\Command;
 
+use Psocksd\ConnectionManagerLabeled;
+
 use Psocksd\App;
 use Socks\Client;
 use ConnectionManager\ConnectionManager;
 use ConnectionManager\ConnectionManagerInterface;
-use ConnectionManager\Extra\ConnectionManagerReject;
 use \UnexpectedValueException;
 use \InvalidArgumentException;
 use \Exception;
@@ -88,7 +89,7 @@ class Via implements CommandInterface
     public function runSetDefault($socket)
     {
         try {
-            $via = $this->createConnectionManager($socket);
+            $via = $this->app->createConnectionManager($socket);
         }
         catch (Exception $e) {
             echo 'error: invalid target: ' . $e->getMessage() . PHP_EOL;
@@ -109,7 +110,7 @@ class Via implements CommandInterface
     public function runAdd($target, $socket, $priority)
     {
         try {
-            $via = $this->createConnectionManager($socket);
+            $via = $this->app->createConnectionManager($socket);
         }
         catch (Exception $e) {
             echo 'error: invalid target: ' . $e->getMessage() . PHP_EOL;
@@ -132,61 +133,6 @@ class Via implements CommandInterface
         $this->app->getConnectionManager()->addConnectionManagerFor($via, $host, $port, $priority);
     }
 
-    protected function createConnectionManager($socket)
-    {
-        if ($socket === 'reject') {
-            echo 'reject' . PHP_EOL;
-            return new ConnectionManagerReject();
-        }
-        $direct = new ConnectionManager($this->app->getLoop(), $this->app->getResolver());
-        if ($socket === 'none') {
-            $via = $direct;
-
-            echo 'use direct connection to target' . PHP_EOL;
-        } else {
-            $parsed = $this->app->parseSocksSocket($socket);
-
-            // TODO: remove hack
-            // resolver can not resolve 'localhost' ATM
-            if ($parsed['host'] === 'localhost') {
-                $parsed['host'] = '127.0.0.1';
-            }
-
-            $via = new Client($this->app->getLoop(), $direct, $this->app->getResolver(), $parsed['host'], $parsed['port']);
-            if (isset($parsed['protocolVersion'])) {
-                try {
-                    $via->setProtocolVersion($parsed['protocolVersion']);
-                }
-                catch (Exception $e) {
-                    throw new Exception('invalid protocol version: ' . $e->getMessage());
-                }
-            }
-            if (isset($parsed['user']) || isset($parsed['pass'])) {
-                $parsed += array('user' =>'', 'pass' => '');
-                try {
-                    $via->setAuth($parsed['user'], $parsed['pass']);
-                }
-                catch (Exception $e) {
-                    throw new Exception('invalid authentication info: ' . $e->getMessage());
-                }
-            }
-
-            echo 'use '.$this->app->reverseSocksSocket($parsed) . ' as next hop';
-
-            try {
-                $via->setResolveLocal(false);
-                echo ' (resolve remotely)';
-            }
-            catch (UnexpectedValueException $ignore) {
-                // ignore in case it's not allowed (SOCKS4 client)
-                echo ' (resolve locally)';
-            }
-
-            echo PHP_EOL;
-        }
-        return $via;
-    }
-
     protected function coercePriority($priority)
     {
         $ret = filter_var($priority, FILTER_VALIDATE_FLOAT);
@@ -203,9 +149,6 @@ class Via implements CommandInterface
 
     protected function dumpConnectionManager(ConnectionManagerInterface $connectionManager)
     {
-        if ($connectionManager instanceof Client) {
-
-        }
-        return get_class($connectionManager) . '()';
+        return get_class($connectionManager) . '(…)';
     }
 }
