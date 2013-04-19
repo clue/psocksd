@@ -133,10 +133,21 @@ class Via implements CommandInterface
             return;
         }
 
-        // TODO: support IPv6 addresses
-        $parts = explode(':', $target, 2);
-        $host = $parts[0];
-        $port = isset($parts[1]) ? $parts[1] : '*';
+        $host = $target;
+        $port = '*';
+
+        $colon = strrpos($host, ':');
+
+        // there is a colon and this is the only colon or there's a closing IPv6 bracket right before it
+        if ($colon !== false && (strpos($host, ':') === $colon || strpos($host, ']') === ($colon - 1))) {
+            $port = (int)substr($host, $colon + 1);
+            $host = substr($host, 0, $colon);
+
+            // remove IPv6 square brackets
+            if (substr($host, 0, 1) === '[') {
+                $host = substr($host, 1, -1);
+            }
+        }
 
         $this->app->getConnectionManager()->addConnectionManagerFor($via, $host, $port, $priority);
     }
