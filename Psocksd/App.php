@@ -26,7 +26,8 @@ class App
             'help'   => new Command\Help($this),
             'status' => new Command\Status($this),
             'via'    => new Command\Via($this),
-            'ping'   => new Command\Ping($this)
+            'ping'   => new Command\Ping($this),
+            'quit'   => new Command\Quit($this)
         );
     }
 
