@@ -23,7 +23,7 @@ class App
     public function __construct()
     {
         $this->commands = array(
-            'help' => new Command\Help($this),
+            'help'   => new Command\Help($this),
             'status' => new Command\Status($this),
             'via'    => new Command\Via($this),
             'ping'   => new Command\Ping($this)
@@ -120,6 +120,10 @@ class App
         return $this->resolver;
     }
 
+    /**
+     *
+     * @return React\EventLoop\LoopInterface
+     */
     public function getLoop()
     {
         return $this->loop;
@@ -128,6 +132,20 @@ class App
     public function getCommands()
     {
         return $this->commands;
+    }
+
+    /**
+     *
+     * @param string $command
+     * @return Command\CommandInterface
+     * @throws Exception
+     */
+    public function getCommand($command)
+    {
+        if (!isset($this->commands[$command])) {
+            throw new Exception('Invalid command given');
+        }
+        return $this->commands[$command];
     }
 
     /**
