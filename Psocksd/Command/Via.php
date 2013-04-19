@@ -62,6 +62,8 @@ class Via implements CommandInterface
             'priority' => 5
         );
 
+        $pad = '  ';
+
         $list = array();
         foreach ($cm->getConnectionManagerEntries() as $id => $entry) {
             $list [$id]= $entry;
@@ -75,16 +77,16 @@ class Via implements CommandInterface
             }
         }
 
-        echo $this->pad('Id:', $lengths['id']) . ' ' .
-             $this->pad('Host:', $lengths['host']) . ' ' .
-             $this->pad('Port:', $lengths['port']) . ' ' .
-             $this->pad('Prio:', $lengths['priority']) . ' ' .
+        echo $this->pad('Id:', $lengths['id']) . $pad .
+             $this->pad('Host:', $lengths['host']) . $pad .
+             $this->pad('Port:', $lengths['port']) . $pad .
+             $this->pad('Prio:', $lengths['priority']) . $pad .
              'Target:' . PHP_EOL;
         foreach ($list as $id => $entry) {
-            echo $this->pad($id, $lengths['id']) . ' ' .
-                 $this->pad($entry['host'], $lengths['host']) . ' ' .
-                 $this->pad($entry['port'], $lengths['port']) . ' ' .
-                 $this->pad($entry['priority'], $lengths['priority']) . ' ' .
+            echo $this->pad($id, $lengths['id']) . $pad .
+                 $this->pad($entry['host'], $lengths['host']) . $pad .
+                 $this->pad($entry['port'], $lengths['port']) . $pad .
+                 $this->pad($entry['priority'], $lengths['priority']) . $pad .
                  $this->dumpConnectionManager($entry['connectionManager']) . PHP_EOL;
         }
     }
