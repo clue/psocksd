@@ -39,7 +39,15 @@ class Via implements CommandInterface
         } else if (count($args) === 2 && $args[0] === 'remove') {
             $this->runRemove($args[1]);
         } else {
-            echo 'error: invalid command arguments ()' . PHP_EOL;
+            echo (count($args) === 0 ? 'no' : 'error: invalid') . ' command arguments given. Valid options are:' . PHP_EOL;
+
+            $this->app->getCommand('help')->dumpHelp(array(
+                'list'                             => 'list all entries',
+                'default <target>'                 => 'set given <target> socks proxy as default target',
+                'reject <host>'                    => 'reject connections to the given host',
+                'add <host> <target> [<priority>]' => 'add new <target> socks proxy for connections to given <host>',
+                'remove <entryId>'                 => 'emove entry with given <id> (see "list")'
+            ));
         }
     }
 
