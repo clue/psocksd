@@ -38,6 +38,8 @@ class Via implements CommandInterface
             $this->runAdd($args[1], $args[2], isset($args[3]) ? $args[3] : 0);
         } else if (count($args) === 2 && $args[0] === 'remove') {
             $this->runRemove($args[1]);
+        } else if (count($args) === 1 && $args[0] === 'reset') {
+            $this->runReset();
         } else {
             echo (count($args) === 0 ? 'no' : 'error: invalid') . ' command arguments given. Valid options are:' . PHP_EOL;
 
@@ -46,7 +48,8 @@ class Via implements CommandInterface
                 'default <target>'                 => 'set given <target> socks proxy as default target',
                 'reject <host>'                    => 'reject connections to the given host',
                 'add <host> <target> [<priority>]' => 'add new <target> socks proxy for connections to given <host>',
-                'remove <entryId>'                 => 'emove entry with given <id> (see "list")'
+                'remove <entryId>'                 => 'emove entry with given <id> (see "list")',
+                'reset'                            => 'clear and reset everything and only connect locally'
             ));
         }
     }
@@ -94,6 +97,19 @@ class Via implements CommandInterface
     public function runRemove($id)
     {
         $this->app->getConnectionManager()->removeConnectionManagerEntry($id);
+    }
+
+    public function runReset()
+    {
+        $cm = $this->app->getConnectionManager();
+
+        // remove all connection managers
+        foreach ($cm->getConnectionManagerEntries() as $id => $entry) {
+            $cm->removeConnectionManagerEntry($id);
+        }
+
+        // add default connection manager
+        $cm->addConnectionManagerFor($this->app->createConnectionManager('none'), '*', '*', App::PRIORITY_DEFAULT);
     }
 
     public function runSetDefault($socket)
