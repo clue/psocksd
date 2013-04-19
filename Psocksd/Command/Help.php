@@ -16,8 +16,23 @@ class Help implements CommandInterface
     public function run($args)
     {
         echo 'psocksd help:' . PHP_EOL;
-        foreach ($this->app->getCommands() as $name => $command) {
-            echo '  ' . $name . ' - ' . $command->getHelp() . PHP_EOL;
+        $this->dumpCommands($this->app->getCommands());
+    }
+
+    public function dumpCommands($commands)
+    {
+        $help = array();
+        foreach ($commands as $name => $command) {
+            $help[$name] = $command->getHelp();
+        }
+        return $this->dumpHelp($help);
+    }
+
+    public function dumpHelp($help)
+    {
+        foreach ($help as $name => $info) {
+            echo '    ' . $name . PHP_EOL .
+                 '        ' . $info . PHP_EOL;
         }
     }
 
