@@ -1,5 +1,9 @@
 {
-    "homepage": "http://github.com/clue/psocksd",
+    "name": "clue/psocksd",
+    "type": "project",
+    "description": "Extensible SOCKS tunnel / proxy server daemon",
+    "keywords": ["SOCKS proxy", "proxy server", "TCP tunnel", "server daemon"],
+    "homepage": "https://github.com/clue/psocksd",
     "license": "MIT",
     "autoload": {
         "psr-0": {"Psocksd": ""}
