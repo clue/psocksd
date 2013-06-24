@@ -2,5 +2,5 @@
 
 include_once __DIR__.'/vendor/autoload.php';
 
-$app = new Psocksd\App();
+$app = new Clue\Psocksd\App();
 $app->run();

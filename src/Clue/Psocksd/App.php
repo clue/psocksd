@@ -1,6 +1,6 @@
 <?php
 
-namespace Psocksd;
+namespace Clue\Psocksd;
 
 use Socks\Client;
 use React\SocketClient\Connector;

@@ -1,11 +1,9 @@
 <?php
 
-namespace Psocksd\Command;
+namespace Clue\Psocksd\Command;
 
-
-
-use Psocksd\ConnectionManagerLabeled;
-use Psocksd\App;
+use Clue\Psocksd\ConnectionManagerLabeled;
+use Clue\Psocksd\App;
 use Socks\Client;
 use React\SocketClient\ConnectorInterface;
 use \UnexpectedValueException;

@@ -6,7 +6,7 @@
     "homepage": "https://github.com/clue/psocksd",
     "license": "MIT",
     "autoload": {
-        "psr-0": {"Psocksd": ""}
+        "psr-0": {"Clue\\Psocksd": "src"}
     },
     "require": {
         "clue/socks": "0.4.*",
