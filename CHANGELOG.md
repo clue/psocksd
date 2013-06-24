@@ -4,7 +4,11 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## 0.3.0 (2023-06-24)
+## 0.3.1 (2013-06-24)
+
+* Fix: Invalid bin path (unable to run psocksd.phar)
+
+## 0.3.0 (2013-06-24)
 
 * Fix: Support PHP < 5.3.6
 * Update clue/socks to v0.4 and clue/connection-manager-extra to v0.3.0 and 
