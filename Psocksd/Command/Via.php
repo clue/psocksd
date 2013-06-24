@@ -2,12 +2,12 @@
 
 namespace Psocksd\Command;
 
-use Psocksd\ConnectionManagerLabeled;
 
+
+use Psocksd\ConnectionManagerLabeled;
 use Psocksd\App;
 use Socks\Client;
-use ConnectionManager\ConnectionManager;
-use ConnectionManager\ConnectionManagerInterface;
+use React\SocketClient\ConnectorInterface;
 use \UnexpectedValueException;
 use \InvalidArgumentException;
 use \Exception;
@@ -184,7 +184,7 @@ class Via implements CommandInterface
         return $str . str_repeat(' ', $len - mb_strlen($str, 'utf-8'));
     }
 
-    protected function dumpConnectionManager(ConnectionManagerInterface $connectionManager)
+    protected function dumpConnectionManager(ConnectorInterface $connectionManager)
     {
         if ($connectionManager instanceof ConnectionManagerLabeled) {
             return (string)$connectionManager;
