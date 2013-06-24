@@ -9,8 +9,8 @@
         "psr-0": {"Psocksd": ""}
     },
     "require": {
-        "clue/socks": "0.3.*",
-        "clue/connection-manager-extra": "dev-master"
+        "clue/socks": "0.4.*",
+        "clue/connection-manager-extra": "0.3.*"
     },
     "bin": ["psocksd.php"]
 }
