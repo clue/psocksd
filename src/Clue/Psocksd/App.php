@@ -1,10 +1,10 @@
 <?php
 
-namespace Psocksd;
+namespace Clue\Psocksd;
 
 use Socks\Client;
-use ConnectionManager\ConnectionManager;
-use ConnectionManager\ConnectionManagerInterface;
+use React\SocketClient\Connector;
+use React\SocketClient\ConnectorInterface;
 use ConnectionManager\Extra\Multiple\ConnectionManagerSelective;
 use ConnectionManager\Extra\ConnectionManagerReject;
 use \InvalidArgumentException;
@@ -163,7 +163,7 @@ class App
             echo 'reject' . PHP_EOL;
             return new ConnectionManagerLabeled(new ConnectionManagerReject(), '-reject-');
         }
-        $direct = new ConnectionManager($this->loop, $this->resolver);
+        $direct = new Connector($this->loop, $this->resolver);
         if ($socket === 'none') {
             $via = new ConnectionManagerLabeled($direct, '-direct-');
 
@@ -207,7 +207,7 @@ class App
                 echo ' (resolve locally)';
             }
 
-            $via = new ConnectionManagerLabeled($via, $this->reverseSocksSocket($parsed));
+            $via = new ConnectionManagerLabeled($via->createConnector(), $this->reverseSocksSocket($parsed));
 
             echo PHP_EOL;
         }

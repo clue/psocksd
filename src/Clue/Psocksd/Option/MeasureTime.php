@@ -1,6 +1,6 @@
 <?php
 
-namespace Psocksd\Option;
+namespace Clue\Psocksd\Option;
 
 class MeasureTime
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Psocksd\Command;
+namespace Clue\Psocksd\Command;
 
 class Status implements CommandInterface
 {

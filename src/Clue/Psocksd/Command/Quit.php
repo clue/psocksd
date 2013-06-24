@@ -1,8 +1,8 @@
 <?php
 
-namespace Psocksd\Command;
+namespace Clue\Psocksd\Command;
 
-use Psocksd\App;
+use Clue\Psocksd\App;
 
 class Quit implements CommandInterface
 {

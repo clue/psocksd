@@ -1,6 +1,6 @@
 <?php
 
-namespace Psocksd\Command;
+namespace Clue\Psocksd\Command;
 
 interface CommandInterface
 {

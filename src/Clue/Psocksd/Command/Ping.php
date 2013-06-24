@@ -1,10 +1,10 @@
 <?php
 
-namespace Psocksd\Command;
+namespace Clue\Psocksd\Command;
 
-use Psocksd\App;
+use Clue\Psocksd\App;
 use Socks\Client;
-use ConnectionManager\ConnectionManager;
+use React\SocketClient\Connector;
 use \UnexpectedValueException;
 use \Exception;
 
@@ -39,7 +39,7 @@ class Ping implements CommandInterface
             $parsed['host'] = '127.0.0.1';
         }
 
-        $direct = new ConnectionManager($this->app->getLoop(), $this->app->getResolver());
+        $direct = new Connector($this->app->getLoop(), $this->app->getResolver());
         $via = new Client($this->app->getLoop(), $direct, $this->app->getResolver(), $parsed['host'], $parsed['port']);
         if (isset($parsed['protocolVersion'])) {
             try {
@@ -91,7 +91,7 @@ class Ping implements CommandInterface
     public function ping($via, $host, $port)
     {
         $start = microtime(true);
-        return $via->getConnection($host, $port)->then(function ($stream) use ($start) {
+        return $via->create($host, $port)->then(function ($stream) use ($start) {
             $stop = microtime(true);
             $stream->close();
             return ($stop - $start);
