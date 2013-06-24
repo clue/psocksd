@@ -5,6 +5,7 @@ namespace Clue\Psocksd\Command;
 use Clue\Psocksd\App;
 use Socks\Client;
 use React\SocketClient\Connector;
+use React\SocketClient\ConnectorInterface;
 use \UnexpectedValueException;
 use \Exception;
 
@@ -67,7 +68,7 @@ class Ping implements CommandInterface
         catch (UnexpectedValueException $ignore) {
             // ignore in case it's not allowed (SOCKS4 client)
         }
-        $this->pingEcho($via, 'www.google.com', 80);
+        $this->pingEcho($via->createConnector(), 'www.google.com', 80);
     }
 
     public function getHelp()
@@ -75,7 +76,7 @@ class Ping implements CommandInterface
         return 'ping another SOCKS proxy server via TCP handshake';
     }
 
-    public function pingEcho($via, $host, $port)
+    public function pingEcho(ConnectorInterface $via, $host, $port)
     {
         echo 'ping ' . $host . ':' . $port . PHP_EOL;
         return $this->ping($via, $host, $port)->then(function ($time) {
@@ -88,7 +89,7 @@ class Ping implements CommandInterface
         });
     }
 
-    public function ping($via, $host, $port)
+    public function ping(ConnectorInterface $via, $host, $port)
     {
         $start = microtime(true);
         return $via->create($host, $port)->then(function ($stream) use ($start) {
