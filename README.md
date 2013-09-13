@@ -24,16 +24,18 @@ perform transparent protocol translation or add SOCKS authentication for clients
 
 Once [installed](#install), you can start `psocksd` and listen for SOCKS connections on localhost:9050 by running:
 
-`php psocksd.phar`
+```bash
+$ php psocksd.phar
+```
 
 You can optionally supply an additional listen-address like this:
 
-```
-php psocksd.phar 9051 # start SOCKS daemon on port 9051 instead
-php psocksd.phar 192.168.1.2:9050 # explicitly listen on the given interface
-php psocksd.phar *:9050 # listen on all interfaces (allow access to SOCKS server from the outside)
-php psocksd.phar socks5://localhost:9050 # explicitly only support SOCKS5 and reject other protocol versions
-php psocksd.phar socks5://username:password@localhost:9051 # require client to send the given authentication information
+```bash
+$ php psocksd.phar 9051 # start SOCKS daemon on port 9051 instead
+$ php psocksd.phar 192.168.1.2:9050 # explicitly listen on the given interface
+$ php psocksd.phar *:9050 # listen on all interfaces (allow access to SOCKS server from the outside)
+$ php psocksd.phar socks5://localhost:9050 # explicitly only support SOCKS5 and reject other protocol versions
+$ php psocksd.phar socks5://username:password@localhost:9051 # require client to send the given authentication information
 ```
 
 ## Install
@@ -94,7 +96,7 @@ If you have followed the above install instructions, you can update `psocksd` by
 
 ```bash
 $ git pull
-$ php composer.phar update
+$ php composer.phar install
 ```
 
 ## License
