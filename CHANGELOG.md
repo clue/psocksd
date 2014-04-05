@@ -4,7 +4,7 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
-## 0.3.2 (2014-04-xx)
+## 0.3.2 (2014-04-05)
 
 * Fix: Fixed invalid reference in the `ping` command.
 
