@@ -4,6 +4,10 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## 0.3.2 (2014-04-xx)
+
+* Fix: Fixed invalid reference in the `ping` command.
+
 ## 0.3.1 (2013-06-24)
 
 * Fix: Invalid bin path (unable to run psocksd.phar)
