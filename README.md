@@ -22,20 +22,48 @@ perform transparent protocol translation or add SOCKS authentication for clients
 
 ## Usage
 
-Once [installed](#install), you can start `psocksd` and listen for SOCKS connections on localhost:9050 by running:
+Once [installed](#install), you can start `psocksd` and listen for incoming SOCKS connections by running:
 
 ```bash
 $ php psocksd.phar
 ```
 
-You can optionally supply an additional listen-address like this:
+Using this command, `psocksd` will start listening on the default adress `localhost:9050`.
+
+### Listen address
+
+If you want to listen on another address, you can supply an explicit
+listen address like this:
 
 ```bash
-$ php psocksd.phar 9051 # start SOCKS daemon on port 9051 instead
-$ php psocksd.phar 192.168.1.2:9050 # explicitly listen on the given interface
-$ php psocksd.phar *:9050 # listen on all interfaces (allow access to SOCKS server from the outside)
-$ php psocksd.phar socks5://localhost:9050 # explicitly only support SOCKS5 and reject other protocol versions
-$ php psocksd.phar socks5://username:password@localhost:9051 # require client to send the given authentication information
+# start SOCKS daemon on port 9051 instead
+$ php psocksd.phar 9051
+
+# explicitly listen on the given interface
+$ php psocksd.phar 192.168.1.2:9050
+
+# listen on all interfaces (allow access to SOCKS server from the outside)
+$ php psocksd.phar *:9050
+
+# explicitly only support SOCKS5 and reject other protocol versions
+$ php psocksd.phar socks5://localhost:9050
+
+# require client to send the given authentication information
+$ php psocksd.phar socks5://username:password@localhost:9051
+```
+
+### Client configuration
+
+Once `psocksd` is started, it accepts incoming SOCKS client connections.
+Therefor, you have to configure your client program (webbrowser, email client etc.) to actually use the SOCKS server.
+
+The exact configuration depends on your program, but quite a few programs allow you to use a SOCKS proxy.
+So depending on the above list address, supply the following information:
+
+```
+Proxy-Type: SOCKS4 or SOCKS5
+Socks-Host: localhost
+Socks-Port: 9050
 ```
 
 ## Install
