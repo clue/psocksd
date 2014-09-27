@@ -4,37 +4,46 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7c63b2e3dcbbd37dc1f1103f16f4fdaf",
+    "hash": "fdb8bbfe420a0e9d8f4f0ef772582ee1",
     "packages": [
         {
             "name": "clue/connection-manager-extra",
-            "version": "v0.3.0",
+            "version": "v0.3.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/clue/connection-manager-extra.git",
-                "reference": "v0.3.0"
+                "url": "https://github.com/clue/php-connection-manager-extra.git",
+                "reference": "f8fc2ec784db7974e649c158c826c014296bcf01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/connection-manager-extra/zipball/v0.3.0",
-                "reference": "v0.3.0",
+                "url": "https://api.github.com/repos/clue/php-connection-manager-extra/zipball/f8fc2ec784db7974e649c158c826c014296bcf01",
+                "reference": "f8fc2ec784db7974e649c158c826c014296bcf01",
                 "shasum": ""
             },
             "require": {
-                "react/socket-client": "0.3.*"
+                "php": ">=5.3",
+                "react/event-loop": "0.3.*|0.4.*",
+                "react/promise": "~1.0|~2.0",
+                "react/socket-client": "0.3.*|0.4.*"
             },
             "type": "library",
             "autoload": {
-                "psr-0": {
-                    "ConnectionManager": ""
+                "psr-4": {
+                    "ConnectionManager\\Extra\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@lueck.tv"
+                }
+            ],
             "description": "Extra decorators for creating async TCP/IP connections built upon react/socket-client",
-            "homepage": "https://github.com/clue/connection-manager-extra",
+            "homepage": "https://github.com/clue/php-connection-manager-extra",
             "keywords": [
                 "Connection",
                 "SocketClient",
@@ -48,20 +57,20 @@
                 "retry",
                 "timeout"
             ],
-            "time": "2013-06-24 08:17:50"
+            "time": "2014-09-27 23:03:41"
         },
         {
             "name": "clue/socks",
             "version": "v0.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/clue/socks.git",
-                "reference": "v0.4.0"
+                "url": "https://github.com/clue/php-socks.git",
+                "reference": "55e29d6f356789a0868a0d918441f60773bf5b7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/socks/zipball/v0.4.0",
-                "reference": "v0.4.0",
+                "url": "https://api.github.com/repos/clue/php-socks/zipball/55e29d6f356789a0868a0d918441f60773bf5b7f",
+                "reference": "55e29d6f356789a0868a0d918441f60773bf5b7f",
                 "shasum": ""
             },
             "require": {
@@ -212,23 +221,23 @@
         },
         {
             "name": "react/dns",
-            "version": "v0.3.2",
+            "version": "v0.3.0",
             "target-dir": "React/Dns",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/dns.git",
-                "reference": "v0.3.2"
+                "reference": "3011d27e9e39f83e702b0e7e469192d36fb21205"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/dns/zipball/v0.3.2",
-                "reference": "v0.3.2",
+                "url": "https://api.github.com/repos/reactphp/dns/zipball/3011d27e9e39f83e702b0e7e469192d36fb21205",
+                "reference": "3011d27e9e39f83e702b0e7e469192d36fb21205",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
                 "react/cache": "0.3.*",
-                "react/promise": ">=1.0,<2.0",
+                "react/promise": "~1.0",
                 "react/socket": "0.3.*"
             },
             "type": "library",
@@ -251,21 +260,21 @@
                 "dns",
                 "dns-resolver"
             ],
-            "time": "2013-04-27 08:57:30"
+            "time": "2013-01-20 19:13:14"
         },
         {
             "name": "react/event-loop",
-            "version": "v0.3.2",
+            "version": "v0.3.0",
             "target-dir": "React/EventLoop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/event-loop.git",
-                "reference": "v0.3.2"
+                "reference": "798a43b2e9bd3cedaf7c5de6a39e6d03e4db8e32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/v0.3.2",
-                "reference": "v0.3.2",
+                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/798a43b2e9bd3cedaf7c5de6a39e6d03e4db8e32",
+                "reference": "798a43b2e9bd3cedaf7c5de6a39e6d03e4db8e32",
                 "shasum": ""
             },
             "require": {
@@ -298,17 +307,17 @@
         },
         {
             "name": "react/http-client",
-            "version": "v0.3.2",
+            "version": "v0.3.1",
             "target-dir": "React/HttpClient",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/http-client.git",
-                "reference": "v0.3.2"
+                "reference": "b5d272a01ff224034f1d28f008df7294d3e03c83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/http-client/zipball/v0.3.2",
-                "reference": "v0.3.2",
+                "url": "https://api.github.com/repos/reactphp/http-client/zipball/b5d272a01ff224034f1d28f008df7294d3e03c83",
+                "reference": "b5d272a01ff224034f1d28f008df7294d3e03c83",
                 "shasum": ""
             },
             "require": {
@@ -383,17 +392,17 @@
         },
         {
             "name": "react/socket",
-            "version": "v0.3.2",
+            "version": "v0.3.0",
             "target-dir": "React/Socket",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/socket.git",
-                "reference": "v0.3.2"
+                "reference": "e549b1e39daefebc2f2290c6afdfc6ba5d12e51f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/socket/zipball/v0.3.2",
-                "reference": "v0.3.2",
+                "url": "https://api.github.com/repos/reactphp/socket/zipball/e549b1e39daefebc2f2290c6afdfc6ba5d12e51f",
+                "reference": "e549b1e39daefebc2f2290c6afdfc6ba5d12e51f",
                 "shasum": ""
             },
             "require": {
@@ -421,7 +430,7 @@
             "keywords": [
                 "Socket"
             ],
-            "time": "2013-04-26 20:23:10"
+            "time": "2013-01-21 04:20:49"
         },
         {
             "name": "react/socket-client",
@@ -467,17 +476,17 @@
         },
         {
             "name": "react/stream",
-            "version": "v0.3.2",
+            "version": "v0.3.0",
             "target-dir": "React/Stream",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/stream.git",
-                "reference": "v0.3.2"
+                "reference": "20cc0458ad93e8f1f00ef15408e759436ce36d68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/stream/zipball/v0.3.2",
-                "reference": "v0.3.2",
+                "url": "https://api.github.com/repos/reactphp/stream/zipball/20cc0458ad93e8f1f00ef15408e759436ce36d68",
+                "reference": "20cc0458ad93e8f1f00ef15408e759436ce36d68",
                 "shasum": ""
             },
             "require": {
@@ -508,7 +517,7 @@
                 "pipe",
                 "stream"
             ],
-            "time": "2013-05-10 15:12:22"
+            "time": "2013-04-14 02:10:39"
         }
     ],
     "packages-dev": [
@@ -522,9 +531,9 @@
 
     ],
     "prefer-stable": false,
-    "platform": [
-
-    ],
+    "platform": {
+        "php": ">=5.3"
+    },
     "platform-dev": [
 
     ]
