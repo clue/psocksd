@@ -127,6 +127,15 @@ $ git pull
 $ php composer.phar install
 ```
 
+### Docker
+
+This project is also available as a [docker](https://www.docker.com/) image.
+Using the [clue/psocksd](https://registry.hub.docker.com/u/clue/psocksd/) image is as easy as running this:
+
+```bash
+$ docker run -d -p 9050:9050 clue/psocksd
+```
+
 ## License
 
 MIT-licensed
