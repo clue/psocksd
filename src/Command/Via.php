@@ -4,7 +4,6 @@ namespace Clue\Psocksd\Command;
 
 use Clue\Psocksd\ConnectionManagerLabeled;
 use Clue\Psocksd\App;
-use Socks\Client;
 use React\SocketClient\ConnectorInterface;
 use \UnexpectedValueException;
 use \InvalidArgumentException;

@@ -3,7 +3,7 @@
 namespace Clue\Psocksd\Command;
 
 use Clue\Psocksd\App;
-use Socks\Client;
+use Clue\React\Socks\Client;
 use React\SocketClient\Connector;
 use React\SocketClient\ConnectorInterface;
 use \UnexpectedValueException;
@@ -41,7 +41,7 @@ class Ping implements CommandInterface
         }
 
         $direct = new Connector($this->app->getLoop(), $this->app->getResolver());
-        $via = new Client($this->app->getLoop(), $direct, $this->app->getResolver(), $parsed['host'], $parsed['port']);
+        $via = new Client($this->app->getLoop(), $parsed['host'], $parsed['port'], $direct, $this->app->getResolver());
         if (isset($parsed['protocolVersion'])) {
             try {
                 $via->setProtocolVersion($parsed['protocolVersion']);

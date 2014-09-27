@@ -2,7 +2,7 @@
 
 namespace Clue\Psocksd;
 
-use Socks\Client;
+use Clue\React\Socks\Client;
 use React\SocketClient\Connector;
 use React\SocketClient\ConnectorInterface;
 use ConnectionManager\Extra\Multiple\ConnectionManagerSelective;
@@ -55,7 +55,7 @@ class App
 
         $socket = new \React\Socket\Server($loop);
 
-        $this->server = new \Socks\Server($socket, $loop, $this->via);
+        $this->server = new \Clue\React\Socks\Server($loop, $socket, $this->via);
 
         if (isset($settings['protocolVersion'])) {
             $this->server->setProtocolVersion($settings['protocolVersion']);
@@ -177,7 +177,7 @@ class App
                 $parsed['host'] = '127.0.0.1';
             }
 
-            $via = new Client($this->loop, $direct, $this->resolver, $parsed['host'], $parsed['port']);
+            $via = new Client($this->loop, $parsed['host'], $parsed['port'], $direct, $this->resolver);
             if (isset($parsed['protocolVersion'])) {
                 try {
                     $via->setProtocolVersion($parsed['protocolVersion']);

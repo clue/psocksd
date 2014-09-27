@@ -16,7 +16,7 @@
     },
     "require": {
         "php": ">=5.3",
-        "clue/socks": "0.4.*",
+        "clue/socks-react": "~0.2.0",
         "clue/connection-manager-extra": "0.3.*",
         "react/event-loop": "0.3",
         "react/socket": "0.3",
