@@ -12,7 +12,7 @@
         }
     ],
     "autoload": {
-        "psr-0": {"Clue\\Psocksd": "src"}
+        "psr-4": {"Clue\\Psocksd\\": "src"}
     },
     "require": {
         "clue/socks": "0.4.*",
