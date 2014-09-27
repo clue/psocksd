@@ -4,6 +4,16 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## 0.3.3 (2014-09-27)
+
+* Replace [clue/socks](https://github.com/clue/php-socks) with
+  [clue/socks-react](https://github.com/clue/php-socks-react)
+  and fix support for faster loops (libev / libevent)
+  (#13 and #14)
+  
+* Fix broken dependencies by updating to their latest versions
+  (#15)
+
 ## 0.3.2 (2014-04-05)
 
 * Fix: Fixed invalid reference in the `ping` command.
