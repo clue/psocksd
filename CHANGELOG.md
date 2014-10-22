@@ -4,6 +4,11 @@ This file is a manually maintained list of changes for each release. Feel free
 to add your changes here when sending pull requests. Also send corrections if
 you spot any mistakes.
 
+## 0.3.4 (2014-10-22)
+
+* Fix: Downgrade broken dependency for react/socket-client to v0.3.1
+  (#16)
+
 ## 0.3.3 (2014-09-27)
 
 * Replace [clue/socks](https://github.com/clue/php-socks) with
