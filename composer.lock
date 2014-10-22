@@ -364,24 +364,24 @@
         },
         {
             "name": "react/socket-client",
-            "version": "v0.3.2",
+            "version": "v0.3.1",
             "target-dir": "React/SocketClient",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/socket-client.git",
-                "reference": "v0.3.2"
+                "reference": "87935a0223362c36cd30cf215cbec33377d31ca4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/socket-client/zipball/v0.3.2",
-                "reference": "v0.3.2",
+                "url": "https://api.github.com/repos/reactphp/socket-client/zipball/87935a0223362c36cd30cf215cbec33377d31ca4",
+                "reference": "87935a0223362c36cd30cf215cbec33377d31ca4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
                 "react/dns": "0.3.*",
                 "react/event-loop": "0.3.*",
-                "react/promise": ">=1.0,<2.0"
+                "react/promise": "~1.0"
             },
             "type": "library",
             "extra": {
@@ -450,21 +450,13 @@
             "time": "2013-04-14 02:10:39"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": [],
     "prefer-stable": false,
     "platform": {
         "php": ">=5.3"
     },
-    "platform-dev": [
-
-    ]
+    "platform-dev": []
 }
