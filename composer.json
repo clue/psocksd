@@ -11,6 +11,11 @@
             "email": "christian@lueck.tv"
         }
     ],
+    "config": {
+        "platform": {
+            "php": "5.3.8"
+        }
+    },
     "autoload": {
         "psr-4": {"Clue\\Psocksd\\": "src"}
     },
