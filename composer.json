@@ -11,18 +11,23 @@
             "email": "christian@lueck.tv"
         }
     ],
+    "config": {
+        "platform": {
+            "php": "5.3.8"
+        }
+    },
     "autoload": {
         "psr-4": {"Clue\\Psocksd\\": "src"}
     },
     "require": {
         "php": ">=5.3",
-        "clue/socks-react": "~0.2.0",
-        "clue/connection-manager-extra": "0.3.*",
-        "react/event-loop": "0.3",
-        "react/socket": "0.3",
-        "react/socket-client": "0.3.*",
-        "react/dns": "0.3",
-        "react/stream": "0.3"
+        "clue/socks-react": "^0.4",
+        "clue/connection-manager-extra": "^0.3",
+        "react/event-loop": "^0.4 || ^0.3",
+        "react/socket": "^0.4 || ^0.3",
+        "react/socket-client": "^0.5 || ^0.4",
+        "react/dns": "^0.4 || ^0.3",
+        "react/stream": "^0.4 || 0.3"
     },
     "bin": ["bin/psocksd"]
 }

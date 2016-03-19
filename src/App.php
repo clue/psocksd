@@ -177,7 +177,7 @@ class App
                 $parsed['host'] = '127.0.0.1';
             }
 
-            $via = new Client($this->loop, $parsed['host'], $parsed['port'], $direct, $this->resolver);
+            $via = new Client($parsed['host'] . ':' . $parsed['port'], $this->loop, $direct, $this->resolver);
             if (isset($parsed['protocolVersion'])) {
                 try {
                     $via->setProtocolVersion($parsed['protocolVersion']);
