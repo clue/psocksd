@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "89e57ecba666907df6ff9eae1900b044",
-    "content-hash": "7d70bf6217df9d277e2070c756d86e3e",
+    "hash": "a82a29d22becf8adf7c48d48842dea9f",
+    "content-hash": "ab73f3bc1bf7837ef6bc3dbf54dc9ceb",
     "packages": [
         {
             "name": "clue/connection-manager-extra",
@@ -154,32 +154,26 @@
         },
         {
             "name": "react/cache",
-            "version": "v0.3.2",
-            "target-dir": "React/Cache",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/cache.git",
-                "reference": "v0.3.2"
+                "reference": "558f614891341b1d817a8cdf9a358948ec49638f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/cache/zipball/437357102effb562b44dbc0ac4eb2c209c4f572b",
-                "reference": "v0.3.2",
+                "url": "https://api.github.com/repos/reactphp/cache/zipball/558f614891341b1d817a8cdf9a358948ec49638f",
+                "reference": "558f614891341b1d817a8cdf9a358948ec49638f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2",
-                "react/promise": ">=1.0,<2.0"
+                "php": ">=5.3.0",
+                "react/promise": "~2.0|~1.1"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.3-dev"
-                }
-            },
             "autoload": {
-                "psr-0": {
-                    "React\\Cache": ""
+                "psr-4": {
+                    "React\\Cache\\": "src\\"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -190,38 +184,37 @@
             "keywords": [
                 "cache"
             ],
-            "time": "2013-04-24 08:33:43"
+            "time": "2016-02-25 18:17:16"
         },
         {
             "name": "react/dns",
-            "version": "v0.3.0",
-            "target-dir": "React/Dns",
+            "version": "v0.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/dns.git",
-                "reference": "3011d27e9e39f83e702b0e7e469192d36fb21205"
+                "reference": "62f6201e487df8add209cc42f05ffca33ee1ba05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/dns/zipball/3011d27e9e39f83e702b0e7e469192d36fb21205",
-                "reference": "3011d27e9e39f83e702b0e7e469192d36fb21205",
+                "url": "https://api.github.com/repos/reactphp/dns/zipball/62f6201e487df8add209cc42f05ffca33ee1ba05",
+                "reference": "62f6201e487df8add209cc42f05ffca33ee1ba05",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2",
-                "react/cache": "0.3.*",
-                "react/promise": "~1.0",
-                "react/socket": "0.3.*"
+                "php": ">=5.3.0",
+                "react/cache": "~0.4.0|~0.3.0",
+                "react/promise": "~2.0|~1.1",
+                "react/socket": "~0.4.0|~0.3.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.3-dev"
+                    "dev-master": "0.4-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "React\\Dns": ""
+                "psr-4": {
+                    "React\\Dns\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -233,21 +226,21 @@
                 "dns",
                 "dns-resolver"
             ],
-            "time": "2013-01-20 19:13:14"
+            "time": "2016-02-24 23:45:36"
         },
         {
             "name": "react/event-loop",
-            "version": "v0.3.0",
+            "version": "v0.3.4",
             "target-dir": "React/EventLoop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/event-loop.git",
-                "reference": "798a43b2e9bd3cedaf7c5de6a39e6d03e4db8e32"
+                "reference": "235cddfa999a392e7d63dc9bef2e042492608d9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/798a43b2e9bd3cedaf7c5de6a39e6d03e4db8e32",
-                "reference": "798a43b2e9bd3cedaf7c5de6a39e6d03e4db8e32",
+                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/235cddfa999a392e7d63dc9bef2e042492608d9f",
+                "reference": "235cddfa999a392e7d63dc9bef2e042492608d9f",
                 "shasum": ""
             },
             "require": {
@@ -276,7 +269,7 @@
             "keywords": [
                 "event-loop"
             ],
-            "time": "2013-01-14 23:11:47"
+            "time": "2013-07-21 02:23:09"
         },
         {
             "name": "react/promise",
@@ -324,34 +317,33 @@
         },
         {
             "name": "react/socket",
-            "version": "v0.3.0",
-            "target-dir": "React/Socket",
+            "version": "v0.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/socket.git",
-                "reference": "e549b1e39daefebc2f2290c6afdfc6ba5d12e51f"
+                "reference": "ce015ec5879b96f5d30905f035f223aa85013fcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/socket/zipball/e549b1e39daefebc2f2290c6afdfc6ba5d12e51f",
-                "reference": "e549b1e39daefebc2f2290c6afdfc6ba5d12e51f",
+                "url": "https://api.github.com/repos/reactphp/socket/zipball/ce015ec5879b96f5d30905f035f223aa85013fcc",
+                "reference": "ce015ec5879b96f5d30905f035f223aa85013fcc",
                 "shasum": ""
             },
             "require": {
-                "evenement/evenement": "1.0.*",
-                "php": ">=5.3.3",
-                "react/event-loop": "0.3.*",
-                "react/stream": "0.3.*"
+                "evenement/evenement": "~2.0|~1.0",
+                "php": ">=5.3.0",
+                "react/event-loop": "0.4.*|0.3.*",
+                "react/stream": "0.4.*|0.3.*"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.3-dev"
+                    "dev-master": "0.4-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "React\\Socket": ""
+                "psr-4": {
+                    "React\\Socket\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -362,7 +354,7 @@
             "keywords": [
                 "Socket"
             ],
-            "time": "2013-01-21 04:20:49"
+            "time": "2016-03-01 20:10:35"
         },
         {
             "name": "react/socket-client",
@@ -406,36 +398,39 @@
         },
         {
             "name": "react/stream",
-            "version": "v0.3.0",
-            "target-dir": "React/Stream",
+            "version": "v0.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/stream.git",
-                "reference": "20cc0458ad93e8f1f00ef15408e759436ce36d68"
+                "reference": "305b2328d2a2e157bc13b61a0f5c6e41b666b188"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/stream/zipball/20cc0458ad93e8f1f00ef15408e759436ce36d68",
-                "reference": "20cc0458ad93e8f1f00ef15408e759436ce36d68",
+                "url": "https://api.github.com/repos/reactphp/stream/zipball/305b2328d2a2e157bc13b61a0f5c6e41b666b188",
+                "reference": "305b2328d2a2e157bc13b61a0f5c6e41b666b188",
                 "shasum": ""
             },
             "require": {
-                "evenement/evenement": "1.0.*",
-                "php": ">=5.3.3"
+                "evenement/evenement": "^2.0|^1.0",
+                "php": ">=5.3.8"
+            },
+            "require-dev": {
+                "react/event-loop": "^0.4|^0.3",
+                "react/promise": "^2.0|^1.0"
             },
             "suggest": {
-                "react/event-loop": "0.3.*",
-                "react/promise": "~1.0"
+                "react/event-loop": "^0.4",
+                "react/promise": "^2.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.3-dev"
+                    "dev-master": "0.5-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "React\\Stream": ""
+                "psr-4": {
+                    "React\\Stream\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -447,7 +442,7 @@
                 "pipe",
                 "stream"
             ],
-            "time": "2013-04-14 02:10:39"
+            "time": "2015-10-07 18:32:58"
         }
     ],
     "packages-dev": [],
