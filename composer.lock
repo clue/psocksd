@@ -4,28 +4,28 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a3fe338dc048d696473b15c107c8b4c1",
-    "content-hash": "50a69f6bc7575e37c017b8777292263f",
+    "hash": "89e57ecba666907df6ff9eae1900b044",
+    "content-hash": "7d70bf6217df9d277e2070c756d86e3e",
     "packages": [
         {
             "name": "clue/connection-manager-extra",
-            "version": "v0.3.1",
+            "version": "v0.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/clue/php-connection-manager-extra.git",
-                "reference": "f8fc2ec784db7974e649c158c826c014296bcf01"
+                "reference": "cca4fe9f9c27475542dc858699e849744f6c25eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-connection-manager-extra/zipball/f8fc2ec784db7974e649c158c826c014296bcf01",
-                "reference": "f8fc2ec784db7974e649c158c826c014296bcf01",
+                "url": "https://api.github.com/repos/clue/php-connection-manager-extra/zipball/cca4fe9f9c27475542dc858699e849744f6c25eb",
+                "reference": "cca4fe9f9c27475542dc858699e849744f6c25eb",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3",
-                "react/event-loop": "0.3.*|0.4.*",
-                "react/promise": "~1.0|~2.0",
-                "react/socket-client": "0.3.*|0.4.*"
+                "react/event-loop": "^0.4 || ^0.3",
+                "react/promise": "^1.0 || ^2.0",
+                "react/socket-client": "^0.5 || ^0.4 || ^0.3"
             },
             "type": "library",
             "autoload": {
@@ -58,20 +58,20 @@
                 "retry",
                 "timeout"
             ],
-            "time": "2014-09-27 23:03:41"
+            "time": "2016-03-19 14:23:15"
         },
         {
             "name": "clue/socks-react",
-            "version": "v0.2.1",
+            "version": "v0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/clue/php-socks-react.git",
-                "reference": "3c5c1d86a6e2e21f69eb2641f91d2f3416d9a178"
+                "reference": "ad36da8c0a59493842023a55b54cbf0f7f204085"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-socks-react/zipball/3c5c1d86a6e2e21f69eb2641f91d2f3416d9a178",
-                "reference": "3c5c1d86a6e2e21f69eb2641f91d2f3416d9a178",
+                "url": "https://api.github.com/repos/clue/php-socks-react/zipball/ad36da8c0a59493842023a55b54cbf0f7f204085",
+                "reference": "ad36da8c0a59493842023a55b54cbf0f7f204085",
                 "shasum": ""
             },
             "require": {
@@ -81,7 +81,7 @@
                 "react/event-loop": "0.3.*|0.4.*",
                 "react/promise": "~1.0|~2.0",
                 "react/socket": "0.3.*|0.4.*",
-                "react/socket-client": "0.3.*|0.4.*",
+                "react/socket-client": "^0.5",
                 "react/stream": "0.3.*|0.4.*"
             },
             "type": "library",
@@ -110,7 +110,7 @@
                 "socks server",
                 "tcp tunnel"
             ],
-            "time": "2014-11-13 23:52:55"
+            "time": "2016-03-19 16:55:13"
         },
         {
             "name": "evenement/evenement",
@@ -280,16 +280,16 @@
         },
         {
             "name": "react/promise",
-            "version": "v1.1.0",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/promise.git",
-                "reference": "d76a033b5f4441bfd414a8c4421ccabfa756e110"
+                "reference": "eefff597e67ff66b719f8171480add3c91474a1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/promise/zipball/d76a033b5f4441bfd414a8c4421ccabfa756e110",
-                "reference": "d76a033b5f4441bfd414a8c4421ccabfa756e110",
+                "url": "https://api.github.com/repos/reactphp/promise/zipball/eefff597e67ff66b719f8171480add3c91474a1e",
+                "reference": "eefff597e67ff66b719f8171480add3c91474a1e",
                 "shasum": ""
             },
             "require": {
@@ -320,7 +320,7 @@
                 }
             ],
             "description": "A lightweight implementation of CommonJS Promises/A for PHP",
-            "time": "2015-07-01 14:42:26"
+            "time": "2016-03-07 13:46:50"
         },
         {
             "name": "react/socket",
@@ -366,34 +366,32 @@
         },
         {
             "name": "react/socket-client",
-            "version": "v0.3.1",
-            "target-dir": "React/SocketClient",
+            "version": "v0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/socket-client.git",
-                "reference": "87935a0223362c36cd30cf215cbec33377d31ca4"
+                "reference": "4ed32f2ce1e732586783c7ebd10b7d75386f2588"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/socket-client/zipball/87935a0223362c36cd30cf215cbec33377d31ca4",
-                "reference": "87935a0223362c36cd30cf215cbec33377d31ca4",
+                "url": "https://api.github.com/repos/reactphp/socket-client/zipball/4ed32f2ce1e732586783c7ebd10b7d75386f2588",
+                "reference": "4ed32f2ce1e732586783c7ebd10b7d75386f2588",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3",
-                "react/dns": "0.3.*",
-                "react/event-loop": "0.3.*",
-                "react/promise": "~1.0"
+                "php": ">=5.3.0",
+                "react/dns": "0.4.*|0.3.*",
+                "react/event-loop": "0.4.*|0.3.*",
+                "react/promise": "~2.0|~1.1",
+                "react/stream": "0.4.*|0.3.*"
+            },
+            "require-dev": {
+                "clue/block-react": "~1.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.3-dev"
-                }
-            },
             "autoload": {
-                "psr-0": {
-                    "React\\SocketClient": ""
+                "psr-4": {
+                    "React\\SocketClient\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -404,7 +402,7 @@
             "keywords": [
                 "Socket"
             ],
-            "time": "2013-04-20 14:55:59"
+            "time": "2016-03-19 13:11:48"
         },
         {
             "name": "react/stream",
