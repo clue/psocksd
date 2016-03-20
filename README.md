@@ -73,10 +73,17 @@ You can grab a copy of clue/psocksd in either of the following ways.
 ### As a phar (recommended)
 
 You can simply download a pre-compiled and ready-to-use version as a Phar
-to any directory:
+to any directory.
+Simply download the latest `psocksd.phar` file from our
+[releases page](https://github.com/clue/psocksd/releases):
+
+[Latest release](https://github.com/clue/psocksd/releases/latest)
+
+That's it already. You can now verify everything works by running this:
 
 ```bash
-$ wget http://www.lueck.tv/psocksd/psocksd.phar
+$ cd ~/Downloads
+$ php psocksd.phar
 ```
 
 > If you prefer a global (system-wide) installation without having to type the `.phar` extension
