@@ -1,8 +1,9 @@
-# CHANGELOG
+# Changelog
 
-This file is a manually maintained list of changes for each release. Feel free
-to add your changes here when sending pull requests. Also send corrections if
-you spot any mistakes.
+## 0.3.5 (2016-03-21)
+
+* Fix: Improved support for PHP 5.3 through PHP 7 and HHVM by updating dependencies
+  (#19 by @clue)
 
 ## 0.3.4 (2014-10-22)
 
