@@ -100,8 +100,8 @@ class App
             return;
         }
 
-        // TODO: properly parse command and its arguments (respect quotes, etc.)
-        $args = explode(' ', $line);
+        // parse command and its arguments (respect quotes etc.)
+        $args = str_getcsv($line, ' ', '"', '\\');
         $command = array_shift($args);
 
         if (isset($this->commands[$command])) {
