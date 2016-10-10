@@ -7,6 +7,7 @@ use React\SocketClient\Connector;
 use React\SocketClient\ConnectorInterface;
 use ConnectionManager\Extra\Multiple\ConnectionManagerSelective;
 use ConnectionManager\Extra\ConnectionManagerReject;
+use Clue\Arguments;
 use \InvalidArgumentException;
 use \Exception;
 
@@ -95,14 +96,14 @@ class App
 
     public function onReadLine($line)
     {
+        // parse command and its arguments (respect quotes etc.)
+        $args = Arguments\split($line);
+        $command = array_shift($args);
+
         // nothing entered => skip input
-        if ($line === '') {
+        if ($command === null) {
             return;
         }
-
-        // parse command and its arguments (respect quotes etc.)
-        $args = str_getcsv($line, ' ', '"', '\\');
-        $command = array_shift($args);
 
         if (isset($this->commands[$command])) {
             $this->commands[$command]->run($args);

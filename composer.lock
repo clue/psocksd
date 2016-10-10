@@ -4,9 +4,54 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a82a29d22becf8adf7c48d48842dea9f",
-    "content-hash": "ab73f3bc1bf7837ef6bc3dbf54dc9ceb",
+    "hash": "3c0f4f18288adbbc15a338d395dc8aaf",
+    "content-hash": "823b127cdc19211c3822c4c0405d6207",
     "packages": [
+        {
+            "name": "clue/arguments",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/clue/php-arguments.git",
+                "reference": "6fcbecb6635290d413d7725212d48b475b120282"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/clue/php-arguments/zipball/6fcbecb6635290d413d7725212d48b475b120282",
+                "reference": "6fcbecb6635290d413d7725212d48b475b120282",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@lueck.tv"
+                }
+            ],
+            "description": "The simple way to split your command line string into an array of command arguments in PHP.",
+            "homepage": "https://github.com/clue/php-arguments",
+            "keywords": [
+                "arguments",
+                "command",
+                "command line",
+                "explode",
+                "parse",
+                "split"
+            ],
+            "time": "2016-10-08 20:14:27"
+        },
         {
             "name": "clue/connection-manager-extra",
             "version": "v0.3.2",
