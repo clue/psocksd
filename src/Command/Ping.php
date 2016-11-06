@@ -16,6 +16,14 @@ class Ping implements CommandInterface
     public function __construct(App $app)
     {
         $this->app = $app;
+
+        $that = $this;
+        $this->app->addCommand('ping [--help | -h]', function () {
+            echo 'Ping the given target socks server. Usage: ping <target>' . PHP_EOL;
+        });
+        $this->app->addCommand('ping <target>', function (array $args) use ($that) {
+            $that->runPing($args['target']);
+        })->shortHelp = $this->getHelp();
     }
 
     public function run($args)
@@ -25,7 +33,11 @@ class Ping implements CommandInterface
             return;
         }
 
-        $socket = $args[0];
+        return $this->runPing($args[0]);
+    }
+
+    public function runPing($socket)
+    {
         try {
             $parsed = $this->app->parseSocksSocket($socket);
         }

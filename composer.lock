@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3c0f4f18288adbbc15a338d395dc8aaf",
-    "content-hash": "823b127cdc19211c3822c4c0405d6207",
+    "hash": "7116729d5f82ab5162b351c738e1371d",
+    "content-hash": "c8c9936e7fbf5cbbbd264a88401e6223",
     "packages": [
         {
             "name": "clue/arguments",
@@ -51,6 +51,56 @@
                 "split"
             ],
             "time": "2016-10-08 20:14:27"
+        },
+        {
+            "name": "clue/commander",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/clue/php-commander.git",
+                "reference": "1c4c917fc7476be4f594046b38f00567ab2d0210"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/clue/php-commander/zipball/1c4c917fc7476be4f594046b38f00567ab2d0210",
+                "reference": "1c4c917fc7476be4f594046b38f00567ab2d0210",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "clue/arguments": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clue\\Commander\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@lueck.tv"
+                }
+            ],
+            "description": "Finally a sane way to register available commands and arguments and match your command line in PHP.",
+            "homepage": "https://github.com/clue/php-commander",
+            "keywords": [
+                "args",
+                "arguments",
+                "argv",
+                "command",
+                "command line",
+                "getopt",
+                "parse",
+                "router"
+            ],
+            "time": "2016-11-06 11:40:41"
         },
         {
             "name": "clue/connection-manager-extra",

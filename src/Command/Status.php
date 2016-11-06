@@ -6,7 +6,10 @@ class Status implements CommandInterface
 {
     public function __construct($app)
     {
-
+        $that = $this;
+        $app->addCommand('status', function () use ($that) {
+            $that->run(array());
+        })->shortHelp = $this->getHelp();
     }
 
     public function run($args)

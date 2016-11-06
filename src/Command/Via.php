@@ -5,7 +5,6 @@ namespace Clue\Psocksd\Command;
 use Clue\Psocksd\ConnectionManagerLabeled;
 use Clue\Psocksd\App;
 use React\SocketClient\ConnectorInterface;
-use \UnexpectedValueException;
 use \InvalidArgumentException;
 use \Exception;
 
@@ -16,6 +15,29 @@ class Via implements CommandInterface
     public function __construct(App $app)
     {
         $this->app = $app;
+
+        $that = $this;
+        $this->app->addCommand('via [--help | -h]', function () use ($that) {
+            echo $that->getHelp() . PHP_EOL;
+        });
+        $this->app->addCommand('via list', function () use ($that) {
+            $that->runList();
+        })->shortHelp = 'list all forwarding entries';
+        $this->app->addCommand('via default <target>', function (array $args) use ($that) {
+            $that->runSetDefault($args['target']);
+        })->shortHelp = 'set given <target> socks proxy as default target';
+        $this->app->addCommand('via reject <host>', function (array $args) use ($that) {
+            $that->runAdd($args['host'], 'reject', -1);
+        })->shortHelp = 'reject connections to the given host';
+        $this->app->addCommand('via add <host> <target> [<priority>]', function (array $args) use ($that) {
+            $that->runAdd($args['host'], $args['target'], isset($args['priority']) ? $args['priority'] : 0);
+        })->shortHelp = 'add new <target> socks proxy for connections to given <host>';
+        $this->app->addCommand('via remove <id>', function (array $args) use ($that) {
+            $that->runRemove($args['id']);
+        })->shortHelp = 'remove forwarding entry with given <id> (see "via list")';
+        $this->app->addCommand('via reset', function (array $args) use ($that) {
+            $that->runReset();
+        })->shortHelp = 'clear and reset all forwarding entries and only connect locally';
     }
 
     public function getHelp()
@@ -25,30 +47,6 @@ class Via implements CommandInterface
 
     public function run($args)
     {
-        if (count($args) === 1 && $args[0] === 'list') {
-            $this->runList();
-        } else if (count($args) === 2 && $args[0] === 'default') {
-            $this->runSetDefault($args[1]);
-        } else if (count($args) === 2 && $args[0] === 'reject') {
-            $this->runAdd($args[1], 'reject', -1);
-        } else if ((count($args) === 3 || count($args) === 4) && $args[0] === 'add') {
-            $this->runAdd($args[1], $args[2], isset($args[3]) ? $args[3] : 0);
-        } else if (count($args) === 2 && $args[0] === 'remove') {
-            $this->runRemove($args[1]);
-        } else if (count($args) === 1 && $args[0] === 'reset') {
-            $this->runReset();
-        } else {
-            echo (count($args) === 0 ? 'no' : 'error: invalid') . ' command arguments given. Valid options are:' . PHP_EOL;
-
-            $this->app->getCommand('help')->dumpHelp(array(
-                'list'                             => 'list all entries',
-                'default <target>'                 => 'set given <target> socks proxy as default target',
-                'reject <host>'                    => 'reject connections to the given host',
-                'add <host> <target> [<priority>]' => 'add new <target> socks proxy for connections to given <host>',
-                'remove <entryId>'                 => 'emove entry with given <id> (see "list")',
-                'reset'                            => 'clear and reset everything and only connect locally'
-            ));
-        }
     }
 
     public function runList()
