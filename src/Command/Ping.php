@@ -9,37 +9,23 @@ use React\SocketClient\ConnectorInterface;
 use \UnexpectedValueException;
 use \Exception;
 
-class Ping implements CommandInterface
+class Ping
 {
-    protected $app;
-
     public function __construct(App $app)
     {
-        $this->app = $app;
-
         $that = $this;
-        $this->app->addCommand('ping [--help | -h]', function () {
+        $app->addCommand('ping [--help | -h]', function () {
             echo 'Ping the given target socks server. Usage: ping <target>' . PHP_EOL;
         });
-        $this->app->addCommand('ping <target>', function (array $args) use ($that) {
-            $that->runPing($args['target']);
-        })->shortHelp = $this->getHelp();
+        $app->addCommand('ping <target>', function (array $args) use ($that, $app) {
+            $that->runPing($args['target'], $app);
+        })->shortHelp = 'ping another SOCKS proxy server via TCP handshake';
     }
 
-    public function run($args)
-    {
-        if (count($args) !== 1) {
-            echo 'error: command requires one argument (target socks server)'.PHP_EOL;
-            return;
-        }
-
-        return $this->runPing($args[0]);
-    }
-
-    public function runPing($socket)
+    public function runPing($socket, App $app)
     {
         try {
-            $parsed = $this->app->parseSocksSocket($socket);
+            $parsed = $app->parseSocksSocket($socket);
         }
         catch (Exception $e) {
             echo 'error: invalid ping target: ' . $e->getMessage() . PHP_EOL;
@@ -52,8 +38,8 @@ class Ping implements CommandInterface
             $parsed['host'] = '127.0.0.1';
         }
 
-        $direct = new Connector($this->app->getLoop(), $this->app->getResolver());
-        $via = new Client($parsed['host'] . ':' . $parsed['port'], $this->app->getLoop(), $direct, $this->app->getResolver());
+        $direct = new Connector($app->getLoop(), $app->getResolver());
+        $via = new Client($parsed['host'] . ':' . $parsed['port'], $app->getLoop(), $direct, $app->getResolver());
         if (isset($parsed['protocolVersion'])) {
             try {
                 $via->setProtocolVersion($parsed['protocolVersion']);
@@ -81,11 +67,6 @@ class Ping implements CommandInterface
             // ignore in case it's not allowed (SOCKS4 client)
         }
         $this->pingEcho($via->createConnector(), 'www.google.com', 80);
-    }
-
-    public function getHelp()
-    {
-        return 'ping another SOCKS proxy server via TCP handshake';
     }
 
     public function pingEcho(ConnectorInterface $via, $host, $port)

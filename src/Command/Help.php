@@ -4,25 +4,21 @@ namespace Clue\Psocksd\Command;
 
 use Clue\Psocksd\App;
 
-class Help implements CommandInterface
+class Help
 {
-    private $app;
-
     public function __construct(App $app)
     {
-        $this->app = $app;
-
         $that = $this;
-        $this->app->addCommand('help', function () use ($that) {
-            $that->run(array());
-        })->shortHelp = $this->getHelp();
+        $app->addCommand('help', function () use ($that, $app) {
+            $that->run($app);
+        })->shortHelp = 'show this very help';
     }
 
-    public function run($args)
+    public function run(App $app)
     {
         echo 'psocksd help:' . PHP_EOL;
 
-        $commands = $this->app->getCommands();
+        $commands = $app->getCommands();
         $first = true;
 
         foreach ($commands as $command) {
@@ -39,10 +35,5 @@ class Help implements CommandInterface
             echo '    ' . (string)$command . PHP_EOL;
             echo '        ' . $command->shortHelp . PHP_EOL;
         }
-    }
-
-    public function getHelp()
-    {
-        return 'show this very help';
     }
 }

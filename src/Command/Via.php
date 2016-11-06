@@ -8,7 +8,7 @@ use React\SocketClient\ConnectorInterface;
 use \InvalidArgumentException;
 use \Exception;
 
-class Via implements CommandInterface
+class Via
 {
     protected $app;
 
@@ -17,41 +17,32 @@ class Via implements CommandInterface
         $this->app = $app;
 
         $that = $this;
-        $this->app->addCommand('via [--help | -h]', function () use ($that) {
-            echo $that->getHelp() . PHP_EOL;
+        $app->addCommand('via [--help | -h]', function () use ($that) {
+            echo 'forward all connections via next SOCKS server' . PHP_EOL;
         });
-        $this->app->addCommand('via list', function () use ($that) {
-            $that->runList();
+        $app->addCommand('via list', function () use ($that, $app) {
+            $that->runList($app);
         })->shortHelp = 'list all forwarding entries';
-        $this->app->addCommand('via default <target>', function (array $args) use ($that) {
-            $that->runSetDefault($args['target']);
+        $app->addCommand('via default <target>', function (array $args) use ($that, $app) {
+            $that->runSetDefault($args['target'], $app);
         })->shortHelp = 'set given <target> socks proxy as default target';
-        $this->app->addCommand('via reject <host>', function (array $args) use ($that) {
-            $that->runAdd($args['host'], 'reject', -1);
+        $app->addCommand('via reject <host>', function (array $args) use ($that, $app) {
+            $that->runAdd($args['host'], 'reject', -1, $app);
         })->shortHelp = 'reject connections to the given host';
-        $this->app->addCommand('via add <host> <target> [<priority>]', function (array $args) use ($that) {
-            $that->runAdd($args['host'], $args['target'], isset($args['priority']) ? $args['priority'] : 0);
+        $app->addCommand('via add <host> <target> [<priority>]', function (array $args) use ($that, $app) {
+            $that->runAdd($args['host'], $args['target'], isset($args['priority']) ? $args['priority'] : 0, $app);
         })->shortHelp = 'add new <target> socks proxy for connections to given <host>';
-        $this->app->addCommand('via remove <id>', function (array $args) use ($that) {
-            $that->runRemove($args['id']);
+        $app->addCommand('via remove <id>', function (array $args) use ($that, $app) {
+            $that->runRemove($args['id'], $app);
         })->shortHelp = 'remove forwarding entry with given <id> (see "via list")';
-        $this->app->addCommand('via reset', function (array $args) use ($that) {
-            $that->runReset();
+        $app->addCommand('via reset', function (array $args) use ($that, $app) {
+            $that->runReset($app);
         })->shortHelp = 'clear and reset all forwarding entries and only connect locally';
     }
 
-    public function getHelp()
+    public function runList(App $app)
     {
-        return 'forward all connections via next SOCKS server';
-    }
-
-    public function run($args)
-    {
-    }
-
-    public function runList()
-    {
-        $cm = $this->app->getConnectionManager();
+        $cm = $app->getConnectionManager();
 
         $lengths = array(
             'id' => 3,
@@ -89,14 +80,14 @@ class Via implements CommandInterface
         }
     }
 
-    public function runRemove($id)
+    public function runRemove($id, App $app)
     {
-        $this->app->getConnectionManager()->removeConnectionManagerEntry($id);
+        $app->getConnectionManager()->removeConnectionManagerEntry($id);
     }
 
-    public function runReset()
+    public function runReset(App $app)
     {
-        $cm = $this->app->getConnectionManager();
+        $cm = $app->getConnectionManager();
 
         // remove all connection managers
         foreach ($cm->getConnectionManagerEntries() as $id => $entry) {
@@ -104,13 +95,13 @@ class Via implements CommandInterface
         }
 
         // add default connection manager
-        $cm->addConnectionManagerFor($this->app->createConnectionManager('none'), '*', '*', App::PRIORITY_DEFAULT);
+        $cm->addConnectionManagerFor($app->createConnectionManager('none'), '*', '*', App::PRIORITY_DEFAULT);
     }
 
-    public function runSetDefault($socket)
+    public function runSetDefault($socket, App $app)
     {
         try {
-            $via = $this->app->createConnectionManager($socket);
+            $via = $app->createConnectionManager($socket);
         }
         catch (Exception $e) {
             echo 'error: invalid target: ' . $e->getMessage() . PHP_EOL;
@@ -118,7 +109,7 @@ class Via implements CommandInterface
         }
 
         // remove all CMs with PRIORITY_DEFAULT
-        $cm = $this->app->getConnectionManager();
+        $cm = $app->getConnectionManager();
         foreach ($cm->getConnectionManagerEntries() as $id => $entry) {
             if ($entry['priority'] == App::PRIORITY_DEFAULT) {
                 $cm->removeConnectionManagerEntry($id);
@@ -128,10 +119,10 @@ class Via implements CommandInterface
         $cm->addConnectionManagerFor($via, '*', '*', App::PRIORITY_DEFAULT);
     }
 
-    public function runAdd($target, $socket, $priority)
+    public function runAdd($target, $socket, $priority, App $app)
     {
         try {
-            $via = $this->app->createConnectionManager($socket);
+            $via = $app->createConnectionManager($socket);
         }
         catch (Exception $e) {
             echo 'error: invalid target: ' . $e->getMessage() . PHP_EOL;
@@ -162,7 +153,7 @@ class Via implements CommandInterface
             }
         }
 
-        $this->app->getConnectionManager()->addConnectionManagerFor($via, $host, $port, $priority);
+        $app->getConnectionManager()->addConnectionManagerFor($via, $host, $port, $priority);
     }
 
     protected function coercePriority($priority)
