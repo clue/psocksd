@@ -38,19 +38,40 @@ class App
         new Command\Quit($this);
     }
 
-    public function run()
+    public function run(array $argv = null)
     {
-        $measureTraffic = true;
-        $measureTime = true;
+        $that = $this;
+        $commander = new Router();
+        $main = $commander->add('[<socket>]', function ($args) use ($that) {
+            $that->start($args);
+        });
+        $commander->add('[--help | -h]', function () use ($main) {
+            $bin = isset($_SERVER['argv'][0]) ? $_SERVER['argv'][0] : 'psocksd';
+            echo 'Welcome to psocksd, the PHP SOCKS server daemon!' . PHP_EOL;
+            echo 'Usage: ' . $bin . ' ' . $main . PHP_EOL;
+        });
 
-        $socket = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : 'socks://localhost:9050';
+        try {
+            $commander->handleArgv($argv);
+        } catch (NoRouteFoundException $e) {
+            echo 'Invalid command usage. Run with "--help"' . PHP_EOL;
+        }
+    }
 
-        $settings = $this->parseSocksSocket($socket);
+    public function start(array $args)
+    {
+        // apply default settings for arguments
+        $args += array(
+            'socket' => 'socks://localhost:9050',
+            'measureTraffic' => true,
+            'measureTime' => true,
+        );
+
+        $settings = $this->parseSocksSocket($args['socket']);
 
         if ($settings['host'] === '*') {
             $settings['host'] = '0.0.0.0';
         }
-
 
         $this->loop = $loop = \React\EventLoop\Factory::create();
 
@@ -79,11 +100,11 @@ class App
 
         new Option\Log($this->server);
 
-        if ($measureTraffic) {
+        if ($args['measureTraffic']) {
             new Option\MeasureTraffic($this->server);
         }
 
-        if ($measureTime) {
+        if ($args['measureTime']) {
             new Option\MeasureTime($this->server);
         }
 
