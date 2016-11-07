@@ -52,6 +52,15 @@ $ php psocksd.phar socks5://localhost:9050
 $ php psocksd.phar socks5://username:password@localhost:9051
 ```
 
+### Interactive CLI
+
+By default, `psocksd` will run an interactive command line interface.
+This means that it keeps running in the foreground and accepts commands from
+`STDIN`.
+
+You can pass the `--no-interaction` argument to disable this interactive mode
+so that it does not accept any commands from `STDIN`.
+
 ### Client configuration
 
 Once `psocksd` is started, it accepts incoming SOCKS client connections.

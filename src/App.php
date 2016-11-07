@@ -42,7 +42,7 @@ class App
     {
         $that = $this;
         $commander = new Router();
-        $main = $commander->add('[<socket>]', function ($args) use ($that) {
+        $main = $commander->add('[<socket>] [--no-interaction | -n]', function ($args) use ($that) {
             $that->start($args);
         });
         $commander->add('[--help | -h]', function () use ($main) {
@@ -65,6 +65,7 @@ class App
             'socket' => 'socks://localhost:9050',
             'measureTraffic' => true,
             'measureTime' => true,
+            'interactive' => !isset($args['no-interaction']) && !isset($args['n']) && defined('STDIN') && is_resource(STDIN),
         );
 
         $settings = $this->parseSocksSocket($args['socket']);
@@ -110,12 +111,14 @@ class App
 
         echo 'SOCKS proxy server listening on ' . $settings['host'] . ':' . $settings['port'] . PHP_EOL;
 
-        if (defined('STDIN') && is_resource(STDIN)) {
+        if ($args['interactive']) {
             $that = $this;
             $loop->addReadStream(STDIN, function() use ($that) {
                 $line = trim(fgets(STDIN, 4096));
                 $that->onReadLine($line);
             });
+        } else {
+            echo 'Running in non-interactive mode.' . PHP_EOL;
         }
 
         $loop->run();
