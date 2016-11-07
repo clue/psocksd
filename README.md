@@ -1,7 +1,6 @@
-psocksd
-=======
+# psocksd
 
-Extensible SOCKS tunnel / proxy server daemon written in PHP
+The SOCKS tunnel / proxy server daemon written in PHP
 
 ## Features
 

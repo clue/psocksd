@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 (2016-11-07)
+
+* Feature: Improve interactive mode by showing prompt and interleaved I/O
+  (#22 by @clue)
+
+* Feature: Improve usage help and command routing and their arguments
+  (#21 by @clue)
+
 ## 0.3.5 (2016-03-21)
 
 * Fix: Improved support for PHP 5.3 through PHP 7 and HHVM by updating dependencies

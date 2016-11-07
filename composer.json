@@ -1,8 +1,8 @@
 {
     "name": "clue/psocksd",
     "type": "project",
-    "description": "Extensible SOCKS tunnel / proxy server daemon",
-    "keywords": ["SOCKS proxy", "proxy server", "TCP tunnel", "server daemon"],
+    "description": "The SOCKS tunnel / proxy server daemon written in PHP",
+    "keywords": ["SOCKS proxy", "proxy server", "TCP tunnel", "forwarding", "server daemon", "ReactPHP"],
     "homepage": "https://github.com/clue/psocksd",
     "license": "MIT",
     "authors": [
