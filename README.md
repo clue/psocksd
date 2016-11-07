@@ -63,6 +63,32 @@ so that it does not accept any commands from `STDIN`.
 The interactive mode is always disabled on Windows, because it's impossible to
 read from `STDIN` without blocking the whole daemon.
 
+You can run the `help` command in order to see all available commands and their
+usage:
+
+```
+> help
+psocksd help:
+[…]
+```
+
+You can run the `ping` command in order to test creating a TCP/IP connection
+through the given SOCKS server:
+
+```
+> ping 192.168.1.200:1080
+ping www.google.com:80
+ping test OK (⌚ 0.378s)
+```
+
+You can run the `exit` or `quit` command (or hit `CTRL+D` or `CTRL-C`) in
+order to exit the program:
+
+```
+> exit
+exiting...
+```
+
 ### Client configuration
 
 Once `psocksd` is started, it accepts incoming SOCKS client connections.

@@ -12,6 +12,8 @@ use Clue\Commander\Router;
 use \InvalidArgumentException;
 use \Exception;
 use Clue\Commander\NoRouteFoundException;
+use Clue\React\Stdio\Stdio;
+use React\Stream\Stream;
 
 class App
 {
@@ -20,6 +22,7 @@ class App
     private $resolver;
     private $via;
     private $commander;
+    private $stdio;
 
     const PRIORITY_DEFAULT = 100;
 
@@ -76,6 +79,38 @@ class App
 
         $this->loop = $loop = \React\EventLoop\Factory::create();
 
+        $this->stdio = new Stream(STDOUT, $loop);
+        $this->stdio->pause();
+
+        if ($args['interactive']) {
+            $this->stdio = new Stdio($loop);
+            $this->stdio->getReadline()->setPrompt('> ');
+
+            // forward all lines through commander
+            $this->stdio->getReadline()->on('data', array($this, 'onReadLine'));
+
+            // exit program when input stream closes
+            $this->stdio->on('end', function () use ($loop) {
+                echo 'STDIN closed. Exiting program...';
+                $loop->stop();
+                echo PHP_EOL;
+
+                // stop output buffering
+                ob_end_flush();
+            });
+
+            // make sure any echo calls will be piped through this stdio instance
+            $stdio = $this->stdio;
+            ob_start(function ($chunk) use ($stdio) {
+                $stdio->write($chunk);
+                return '';
+            }, 1);
+
+            $this->stdio->write('Running in interactive mode. Type "help" for more info.' . PHP_EOL);
+        } else {
+            $this->stdio->write('Running in non-interactive mode.');
+        }
+
         $dnsResolverFactory = new \React\Dns\Resolver\Factory();
         $this->resolver = $dns = $dnsResolverFactory->createCached('8.8.8.8', $loop);
 
@@ -90,7 +125,13 @@ class App
             $this->server->setProtocolVersion($settings['protocolVersion']);
         }
 
-        $socket->listen($settings['port'], $settings['host']);
+        try {
+            $socket->listen($settings['port'], $settings['host']);
+        } catch (Exception $e) {
+            $this->stdio->write('ERROR: Unable to start listening socket: ' . $e->getMessage() . PHP_EOL);
+            $this->stdio->close();
+        }
+        $this->stdio->write('SOCKS proxy server listening on ' . $settings['host'] . ':' . $settings['port'] . PHP_EOL);
 
         if (isset($settings['user']) || isset($settings['pass'])) {
             $settings += array('user' => '', 'pass' => '');
@@ -99,7 +140,7 @@ class App
             ));
         }
 
-        new Option\Log($this->server);
+        new Option\Log($this->server, $this->stdio);
 
         if ($args['measureTraffic']) {
             new Option\MeasureTraffic($this->server);
@@ -107,28 +148,6 @@ class App
 
         if ($args['measureTime']) {
             new Option\MeasureTime($this->server);
-        }
-
-        echo 'SOCKS proxy server listening on ' . $settings['host'] . ':' . $settings['port'] . PHP_EOL;
-
-        if ($args['interactive']) {
-            $that = $this;
-            $loop->addReadStream(STDIN, function() use ($that, $loop) {
-                $line = fgets(STDIN, 4096);
-                if ($line === false) {
-                    echo 'STDIN closed. Exiting program...';
-                    $loop->removeReadStream(STDIN);
-                    $loop->stop();
-                    echo PHP_EOL;
-
-                    return;
-                }
-
-                $that->onReadLine($line);
-            });
-            echo 'Running in interactive mode. Type "help" for more info.' . PHP_EOL;
-        } else {
-            echo 'Running in non-interactive mode.' . PHP_EOL;
         }
 
         $loop->run();
@@ -141,8 +160,12 @@ class App
 
         try {
             $this->commander->handleArgs($args);
+
+            // explicitly flush output buffer after running subcommand
+            ob_flush();
         } catch (NoRouteFoundException $e) {
-            echo 'invalid command. type "help"?' . PHP_EOL;
+            ob_flush();
+            $this->stdio->write('invalid command. type "help"?' . PHP_EOL);
         }
     }
 
@@ -186,14 +209,14 @@ class App
     public function createConnectionManager($socket)
     {
         if ($socket === 'reject') {
-            echo 'reject' . PHP_EOL;
+            $this->stdio->write('reject' . PHP_EOL);
             return new ConnectionManagerLabeled(new ConnectionManagerReject(), '-reject-');
         }
         $direct = new Connector($this->loop, $this->resolver);
         if ($socket === 'none') {
             $via = new ConnectionManagerLabeled($direct, '-direct-');
 
-            echo 'use direct connection to target' . PHP_EOL;
+            $this->stdio->write('use direct connection to target' . PHP_EOL);
         } else {
             $parsed = $this->parseSocksSocket($socket);
 
@@ -222,20 +245,20 @@ class App
                 }
             }
 
-            echo 'use '.$this->reverseSocksSocket($parsed) . ' as next hop';
+            $this->stdio->write('use '.$this->reverseSocksSocket($parsed) . ' as next hop');
 
             try {
                 $via->setResolveLocal(false);
-                echo ' (resolve remotely)';
+                $this->stdio->write(' (resolve remotely)');
             }
             catch (UnexpectedValueException $ignore) {
                 // ignore in case it's not allowed (SOCKS4 client)
-                echo ' (resolve locally)';
+                $this->stdio->write(' (resolve locally)');
             }
 
             $via = new ConnectionManagerLabeled($via->createConnector(), $this->reverseSocksSocket($parsed));
 
-            echo PHP_EOL;
+            $this->stdio->write(PHP_EOL);
         }
         return $via;
     }
