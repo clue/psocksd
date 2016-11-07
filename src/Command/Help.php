@@ -4,40 +4,36 @@ namespace Clue\Psocksd\Command;
 
 use Clue\Psocksd\App;
 
-class Help implements CommandInterface
+class Help
 {
-    private $app;
-
     public function __construct(App $app)
     {
-        $this->app = $app;
+        $that = $this;
+        $app->addCommand('help', function () use ($that, $app) {
+            $that->run($app);
+        })->shortHelp = 'show this very help';
     }
 
-    public function run($args)
+    public function run(App $app)
     {
         echo 'psocksd help:' . PHP_EOL;
-        $this->dumpCommands($this->app->getCommands());
-    }
 
-    public function dumpCommands($commands)
-    {
-        $help = array();
-        foreach ($commands as $name => $command) {
-            $help[$name] = $command->getHelp();
+        $commands = $app->getCommands();
+        $first = true;
+
+        foreach ($commands as $command) {
+            if (!isset($command->shortHelp)) {
+                continue;
+            }
+
+            if ($first) {
+                $first = false;
+            } else {
+                echo PHP_EOL;
+            }
+
+            echo '    ' . (string)$command . PHP_EOL;
+            echo '        ' . $command->shortHelp . PHP_EOL;
         }
-        return $this->dumpHelp($help);
-    }
-
-    public function dumpHelp($help)
-    {
-        foreach ($help as $name => $info) {
-            echo '    ' . $name . PHP_EOL .
-                 '        ' . $info . PHP_EOL;
-        }
-    }
-
-    public function getHelp()
-    {
-        return 'show this very help';
     }
 }

@@ -4,9 +4,104 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a82a29d22becf8adf7c48d48842dea9f",
-    "content-hash": "ab73f3bc1bf7837ef6bc3dbf54dc9ceb",
+    "hash": "a59c16f9c4cfb4c99bb004d1c3dd0b66",
+    "content-hash": "f9b92780514d5eb44f590616dbcc96eb",
     "packages": [
+        {
+            "name": "clue/arguments",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/clue/php-arguments.git",
+                "reference": "6fcbecb6635290d413d7725212d48b475b120282"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/clue/php-arguments/zipball/6fcbecb6635290d413d7725212d48b475b120282",
+                "reference": "6fcbecb6635290d413d7725212d48b475b120282",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@lueck.tv"
+                }
+            ],
+            "description": "The simple way to split your command line string into an array of command arguments in PHP.",
+            "homepage": "https://github.com/clue/php-arguments",
+            "keywords": [
+                "arguments",
+                "command",
+                "command line",
+                "explode",
+                "parse",
+                "split"
+            ],
+            "time": "2016-10-08 20:14:27"
+        },
+        {
+            "name": "clue/commander",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/clue/php-commander.git",
+                "reference": "9b948362d20f6c1e1b214e7eae77f363d8a65ce2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/clue/php-commander/zipball/9b948362d20f6c1e1b214e7eae77f363d8a65ce2",
+                "reference": "9b948362d20f6c1e1b214e7eae77f363d8a65ce2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "clue/arguments": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clue\\Commander\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@lueck.tv"
+                }
+            ],
+            "description": "Finally a sane way to register available commands and arguments and match your command line in PHP.",
+            "homepage": "https://github.com/clue/php-commander",
+            "keywords": [
+                "args",
+                "arguments",
+                "argv",
+                "command",
+                "command line",
+                "getopt",
+                "parse",
+                "router"
+            ],
+            "time": "2016-11-07 08:54:40"
+        },
         {
             "name": "clue/connection-manager-extra",
             "version": "v0.3.2",

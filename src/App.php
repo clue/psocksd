@@ -7,8 +7,11 @@ use React\SocketClient\Connector;
 use React\SocketClient\ConnectorInterface;
 use ConnectionManager\Extra\Multiple\ConnectionManagerSelective;
 use ConnectionManager\Extra\ConnectionManagerReject;
+use Clue\Arguments;
+use Clue\Commander\Router;
 use \InvalidArgumentException;
 use \Exception;
+use Clue\Commander\NoRouteFoundException;
 
 class App
 {
@@ -16,34 +19,59 @@ class App
     private $loop;
     private $resolver;
     private $via;
-    private $commands;
+    private $commander;
 
     const PRIORITY_DEFAULT = 100;
 
     public function __construct()
     {
-        $this->commands = array(
-            'help'   => new Command\Help($this),
-            'status' => new Command\Status($this),
-            'via'    => new Command\Via($this),
-            'ping'   => new Command\Ping($this),
-            'quit'   => new Command\Quit($this)
-        );
+        $this->commander = new Router();
+
+        // nothing entered, skip input
+        $this->commander->add('', function () { });
+
+        // initialize all available sub-commands
+        new Command\Help($this);
+        new Command\Status($this);
+        new Command\Via($this);
+        new Command\Ping($this);
+        new Command\Quit($this);
     }
 
-    public function run()
+    public function run(array $argv = null)
     {
-        $measureTraffic = true;
-        $measureTime = true;
+        $that = $this;
+        $commander = new Router();
+        $main = $commander->add('[<socket>]', function ($args) use ($that) {
+            $that->start($args);
+        });
+        $commander->add('[--help | -h]', function () use ($main) {
+            $bin = isset($_SERVER['argv'][0]) ? $_SERVER['argv'][0] : 'psocksd';
+            echo 'Welcome to psocksd, the PHP SOCKS server daemon!' . PHP_EOL;
+            echo 'Usage: ' . $bin . ' ' . $main . PHP_EOL;
+        });
 
-        $socket = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : 'socks://localhost:9050';
+        try {
+            $commander->handleArgv($argv);
+        } catch (NoRouteFoundException $e) {
+            echo 'Invalid command usage. Run with "--help"' . PHP_EOL;
+        }
+    }
 
-        $settings = $this->parseSocksSocket($socket);
+    public function start(array $args)
+    {
+        // apply default settings for arguments
+        $args += array(
+            'socket' => 'socks://localhost:9050',
+            'measureTraffic' => true,
+            'measureTime' => true,
+        );
+
+        $settings = $this->parseSocksSocket($args['socket']);
 
         if ($settings['host'] === '*') {
             $settings['host'] = '0.0.0.0';
         }
-
 
         $this->loop = $loop = \React\EventLoop\Factory::create();
 
@@ -72,11 +100,11 @@ class App
 
         new Option\Log($this->server);
 
-        if ($measureTraffic) {
+        if ($args['measureTraffic']) {
             new Option\MeasureTraffic($this->server);
         }
 
-        if ($measureTime) {
+        if ($args['measureTime']) {
             new Option\MeasureTime($this->server);
         }
 
@@ -95,18 +123,12 @@ class App
 
     public function onReadLine($line)
     {
-        // nothing entered => skip input
-        if ($line === '') {
-            return;
-        }
+        // parse command and its arguments (respect quotes etc.)
+        $args = Arguments\split($line);
 
-        // TODO: properly parse command and its arguments (respect quotes, etc.)
-        $args = explode(' ', $line);
-        $command = array_shift($args);
-
-        if (isset($this->commands[$command])) {
-            $this->commands[$command]->run($args);
-        } else {
+        try {
+            $this->commander->handleArgs($args);
+        } catch (NoRouteFoundException $e) {
             echo 'invalid command. type "help"?' . PHP_EOL;
         }
     }
@@ -130,23 +152,14 @@ class App
         return $this->loop;
     }
 
-    public function getCommands()
+    public function addCommand($expression, $callback)
     {
-        return $this->commands;
+        return $this->commander->add($expression, $callback);
     }
 
-    /**
-     *
-     * @param string $command
-     * @return Command\CommandInterface
-     * @throws Exception
-     */
-    public function getCommand($command)
+    public function getCommands()
     {
-        if (!isset($this->commands[$command])) {
-            throw new Exception('Invalid command given');
-        }
-        return $this->commands[$command];
+        return $this->commander->getRoutes();
     }
 
     /**
