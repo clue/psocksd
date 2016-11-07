@@ -113,10 +113,20 @@ class App
 
         if ($args['interactive']) {
             $that = $this;
-            $loop->addReadStream(STDIN, function() use ($that) {
-                $line = trim(fgets(STDIN, 4096));
+            $loop->addReadStream(STDIN, function() use ($that, $loop) {
+                $line = fgets(STDIN, 4096);
+                if ($line === false) {
+                    echo 'STDIN closed. Exiting program...';
+                    $loop->removeReadStream(STDIN);
+                    $loop->stop();
+                    echo PHP_EOL;
+
+                    return;
+                }
+
                 $that->onReadLine($line);
             });
+            echo 'Running in interactive mode. Type "help" for more info.' . PHP_EOL;
         } else {
             echo 'Running in non-interactive mode.' . PHP_EOL;
         }
