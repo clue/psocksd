@@ -65,7 +65,7 @@ class App
             'socket' => 'socks://localhost:9050',
             'measureTraffic' => true,
             'measureTime' => true,
-            'interactive' => !isset($args['no-interaction']) && !isset($args['n']) && defined('STDIN') && is_resource(STDIN),
+            'interactive' => DIRECTORY_SEPARATOR === '/' && !isset($args['no-interaction']) && !isset($args['n']) && defined('STDIN') && is_resource(STDIN),
         );
 
         $settings = $this->parseSocksSocket($args['socket']);

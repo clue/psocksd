@@ -60,6 +60,8 @@ This means that it keeps running in the foreground and accepts commands from
 
 You can pass the `--no-interaction` argument to disable this interactive mode
 so that it does not accept any commands from `STDIN`.
+The interactive mode is always disabled on Windows, because it's impossible to
+read from `STDIN` without blocking the whole daemon.
 
 ### Client configuration
 
