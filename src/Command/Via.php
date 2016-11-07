@@ -29,10 +29,10 @@ class Via
         $app->addCommand('via reject <host>', function (array $args) use ($that, $app) {
             $that->runAdd($args['host'], 'reject', -1, $app);
         })->shortHelp = 'reject connections to the given host';
-        $app->addCommand('via add <host> <target> [<priority>]', function (array $args) use ($that, $app) {
+        $app->addCommand('via add <host> <target> [<priority:int>]', function (array $args) use ($that, $app) {
             $that->runAdd($args['host'], $args['target'], isset($args['priority']) ? $args['priority'] : 0, $app);
         })->shortHelp = 'add new <target> socks proxy for connections to given <host>';
-        $app->addCommand('via remove <id>', function (array $args) use ($that, $app) {
+        $app->addCommand('via remove <id:uint>', function (array $args) use ($that, $app) {
             $that->runRemove($args['id'], $app);
         })->shortHelp = 'remove forwarding entry with given <id> (see "via list")';
         $app->addCommand('via reset', function (array $args) use ($that, $app) {

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7116729d5f82ab5162b351c738e1371d",
-    "content-hash": "c8c9936e7fbf5cbbbd264a88401e6223",
+    "hash": "a59c16f9c4cfb4c99bb004d1c3dd0b66",
+    "content-hash": "f9b92780514d5eb44f590616dbcc96eb",
     "packages": [
         {
             "name": "clue/arguments",
@@ -54,16 +54,16 @@
         },
         {
             "name": "clue/commander",
-            "version": "v1.1.0",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/clue/php-commander.git",
-                "reference": "1c4c917fc7476be4f594046b38f00567ab2d0210"
+                "reference": "9b948362d20f6c1e1b214e7eae77f363d8a65ce2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-commander/zipball/1c4c917fc7476be4f594046b38f00567ab2d0210",
-                "reference": "1c4c917fc7476be4f594046b38f00567ab2d0210",
+                "url": "https://api.github.com/repos/clue/php-commander/zipball/9b948362d20f6c1e1b214e7eae77f363d8a65ce2",
+                "reference": "9b948362d20f6c1e1b214e7eae77f363d8a65ce2",
                 "shasum": ""
             },
             "require": {
@@ -100,7 +100,7 @@
                 "parse",
                 "router"
             ],
-            "time": "2016-11-06 11:40:41"
+            "time": "2016-11-07 08:54:40"
         },
         {
             "name": "clue/connection-manager-extra",
