@@ -74,10 +74,12 @@ class Ping
         echo 'ping ' . $host . ':' . $port . PHP_EOL;
         return $this->ping($via, $host, $port)->then(function ($time) {
             echo 'ping test OK (⌚ ' . round($time, 3).'s)' . PHP_EOL;
+            ob_flush();
             return $time;
         }, function ($error) {
             $msg = $error->getMessage();
             echo 'ping test FAILED: ' . $msg . PHP_EOL;
+            ob_flush();
             throw $error;
         });
     }

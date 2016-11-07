@@ -2,14 +2,16 @@
 
 namespace Clue\Psocksd\Option;
 
+use React\Stream\DuplexStreamInterface;
+
 class Log
 {
-    public function __construct($server)
+    public function __construct($server, DuplexStreamInterface $stdio)
     {
-        $server->on('connection', function(\React\Socket\Connection $client) {
+        $server->on('connection', function(\React\Socket\Connection $client) use ($stdio) {
             $name = '#'.(int)$client->stream;
-            $log = function($msg) use ($client, &$name) {
-                echo date('Y-m-d H:i:s') . ' ' . $name . ' ' . $msg . PHP_EOL;
+            $log = function($msg) use ($client, &$name, $stdio) {
+                $stdio->write(date('Y-m-d H:i:s') . ' ' . $name . ' ' . $msg . PHP_EOL);
             };
 
             $log('connected');

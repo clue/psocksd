@@ -29,7 +29,8 @@
         "react/dns": "^0.4 || ^0.3",
         "react/stream": "^0.4 || 0.3",
         "clue/arguments": "^1.0",
-        "clue/commander": "^1.2"
+        "clue/commander": "^1.2",
+        "clue/stdio-react": "^0.4"
     },
     "bin": ["bin/psocksd"]
 }

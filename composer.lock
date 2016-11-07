@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a59c16f9c4cfb4c99bb004d1c3dd0b66",
-    "content-hash": "f9b92780514d5eb44f590616dbcc96eb",
+    "hash": "fc042ae2a70410438cac3f3df47e9bf7",
+    "content-hash": "4bc0fb327bb65bf18138b6f7b026fd4c",
     "packages": [
         {
             "name": "clue/arguments",
@@ -206,6 +206,158 @@
                 "tcp tunnel"
             ],
             "time": "2016-03-19 16:55:13"
+        },
+        {
+            "name": "clue/stdio-react",
+            "version": "v0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/clue/php-stdio-react.git",
+                "reference": "f71acd4c5cfb97dd1ccb1a0965e49eb9a15542b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/clue/php-stdio-react/zipball/f71acd4c5cfb97dd1ccb1a0965e49eb9a15542b8",
+                "reference": "f71acd4c5cfb97dd1ccb1a0965e49eb9a15542b8",
+                "shasum": ""
+            },
+            "require": {
+                "clue/term-react": "^0.1.1",
+                "clue/utf8-react": "^0.1",
+                "php": ">=5.3",
+                "react/event-loop": "0.3.*|0.4.*",
+                "react/stream": "^0.4.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clue\\React\\Stdio\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@lueck.tv"
+                }
+            ],
+            "description": "Async standard console input & output (STDIN, STDOUT)",
+            "homepage": "https://github.com/clue/php-stdio-react",
+            "keywords": [
+                "async",
+                "reactphp",
+                "readline",
+                "stdin",
+                "stdio",
+                "stdout"
+            ],
+            "time": "2016-09-27 09:03:18"
+        },
+        {
+            "name": "clue/term-react",
+            "version": "v0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/clue/php-term-react.git",
+                "reference": "bb8784283aef16b8b1fe3ed5a8fe16d4669cfc92"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/clue/php-term-react/zipball/bb8784283aef16b8b1fe3ed5a8fe16d4669cfc92",
+                "reference": "bb8784283aef16b8b1fe3ed5a8fe16d4669cfc92",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3",
+                "react/stream": "^0.4 || ^0.3"
+            },
+            "require-dev": {
+                "react/event-loop": "^0.4 || ^0.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clue\\React\\Term\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@lueck.tv"
+                }
+            ],
+            "description": "Streaming terminal emulator, built on top of React PHP",
+            "homepage": "https://github.com/clue/php-term-react",
+            "keywords": [
+                "C0",
+                "CSI",
+                "ansi",
+                "apc",
+                "ascii",
+                "c1",
+                "control codes",
+                "dps",
+                "osc",
+                "pm",
+                "reactphp",
+                "streaming",
+                "terminal",
+                "vt100",
+                "xterm"
+            ],
+            "time": "2016-06-14 20:44:58"
+        },
+        {
+            "name": "clue/utf8-react",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/clue/php-utf8-react.git",
+                "reference": "d162cca3c0e05df82d79aad190a0a337cd8ac566"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/clue/php-utf8-react/zipball/d162cca3c0e05df82d79aad190a0a337cd8ac566",
+                "reference": "d162cca3c0e05df82d79aad190a0a337cd8ac566",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3",
+                "react/stream": "^0.4 || ^0.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Clue\\React\\Utf8\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@lueck.tv"
+                }
+            ],
+            "description": "Streaming UTF-8 parser for React PHP",
+            "homepage": "https://github.com/clue/php-utf8-react",
+            "keywords": [
+                "reactphp",
+                "streaming",
+                "unicode",
+                "utf-8",
+                "utf8"
+            ],
+            "time": "2016-06-24 08:57:02"
         },
         {
             "name": "evenement/evenement",
